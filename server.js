@@ -1,5 +1,8 @@
 const express = require("express");
 const app = express();
+const fetch = require("node-fetch");
+const FormData = require("form-data");
+
 const port = 3000;
 
 const mysql = require("mysql");
@@ -29,19 +32,20 @@ app.get("/", (req, res) => {
 app.post("/publicarImagen", (req, res) => {
   const key = "6d207e02198a847aa98d0a2a901485a5";
   const format = "json";
-
+    const source = req.body.imagen;
+    
+      const form = new FormData();
+      form.append("key", key);
+      form.append("action", "upload");
+      form.append("source", source);
+      form.append("format", format);
+    
   fetch(
-    `https://freeimage.host/api/1/upload/`,
+    `https://freeimage.host/api/1/upload`,
     {
         method: "POST",
-        body: JSON.stringify({
-            key: key,
-            source: req.body.imagen,
-            format: format
-        }),
-        headers: {
-            "Content-Type":"application/json"
-        }
+        body: form,
+        headers: form.getHeaders()
     }
   )
     .then((res) => res.json())
