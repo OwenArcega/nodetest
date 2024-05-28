@@ -26,7 +26,7 @@ app.get("/", (req, res) => {
   res.send("Hello world!");
 });
 
-const publicarImagen = (data) => {
+async function publicarImagen(data) {
   const key = "6d207e02198a847aa98d0a2a901485a5";
   const format = "json";
 
@@ -45,10 +45,10 @@ const publicarImagen = (data) => {
       }
     })
     .catch((error) => console.error("Error: " + error));
-};
+}
 
-app.post("/publicarImagen", (req, res) => {
-  const url = publicarImagen(req.body.imagen);
+app.post("/publicarImagen", async (req, res) => {
+  const url = await publicarImagen(req.body.imagen);
   if (url) {
     res.send("ok");
   } else {
