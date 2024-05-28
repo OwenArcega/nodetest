@@ -201,7 +201,7 @@ app.post('/login', (req, res) => {
 
     const { usuario, contrasena } = req.body;
 
-    pool.query(`SELECT id FROM usuarios WHERE nombre = '${usuario}' AND contrasena = '${contrasena}'`,
+    pool.query(`SELECT id FROM usuarios WHERE usuario = '${usuario}' AND contrasena = '${contrasena}'`,
         (error, rows, fields) => {
             if (error) {
                 res.json({
