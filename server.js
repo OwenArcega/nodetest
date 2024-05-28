@@ -39,15 +39,9 @@ app.post("/publicarImagen", (req, res) => {
     .then((res) => res.json())
     .then((data) => {
       if (data.status_code == "200") {
-        res.send({
-          status: "ok",
-          res: data.imagen.display_url,
-        });
+        res.send(data.imagen.display_url);
       } else {
-        res.send({
-          status: "error",
-          error: "No se creo la imagen",
-        });
+        res.send("No se creo la imagen");
       }
     })
     .catch((error) => console.error("Error: " + error));
