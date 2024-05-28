@@ -27,7 +27,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/publicarImagen", (req, res) => {
-  const key = "66d207e02198a847aa98d0a2a901485a5";
+  const key = "6d207e02198a847aa98d0a2a901485a5";
   const format = "json";
 
   fetch(
