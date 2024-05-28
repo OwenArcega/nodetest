@@ -83,8 +83,6 @@ app.post("/registrarPerdida", (req, res) => {
       }
     }
     );
-    
-    connection.
 });
 
 app.get("/obtenerPerdidas", (req, res) => {
