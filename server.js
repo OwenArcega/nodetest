@@ -20,8 +20,6 @@ connection.query("SELECT 1 + 1 AS solution", (err, rows, fields) => {
   console.log("The solution is: ", rows[0].solution);
 });
 
-connection.end();
-
 app.use(express.json());
 app.use(cors());
 
