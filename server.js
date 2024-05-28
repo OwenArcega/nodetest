@@ -163,7 +163,7 @@ app.post("/registrarUsuario", (req, res) => {
   } = req.body;
 
   pool.query(
-    `INSERT INTO usuario(usuario,correo,contrasena) 
+    `INSERT INTO usuarios(usuario,correo,contrasena) 
     VALUES('${usuario}','${correo}','${contrasena}')`,
     (error, rows, fields) => {
       if (error) {
