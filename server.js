@@ -36,7 +36,7 @@ const publicarImagen = (data) => {
       method: "POST",
     }
   )
-    .then((res) => JSON.parse(res))
+    .then((res) => res.json())
     .then((data) => {
       if (data.success.code == "200") {
         data.image.display_url;
@@ -58,6 +58,11 @@ app.post("/publicarImagen", (req, res) => {
       error: "URL de imagen no creada",
     });
   }
+
+  res.send({
+    status: "error",
+    error: "No hizo nada",
+  });
 });
 
 app.post("/registrarPerdida", (req, res) => {
