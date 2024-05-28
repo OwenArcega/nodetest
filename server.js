@@ -160,6 +160,7 @@ app.delete('/eliminarPerdida', (req, res) => {
 
 app.patch('/modificarPerdida', (req, res) => {
     const {
+        id,
       nombre,
       especie,
       raza,
@@ -179,7 +180,7 @@ app.patch('/modificarPerdida', (req, res) => {
         `UPDATE mascotas_perdidas SET nombre = '${nombre}', especie = '${especie}', 
       raza = '${raza}', color = '${color}', edad = ${edad}, sexo = '${sexo}', ubicacion = '${ubicacion}',
       nombreContacto = '${nombreContacto}', telefonoContacto = '${telefonoContacto}', correoContacto = '${correoContacto}',
-      imagen = '${imagen}', descripcion = '${descripcion}', id_usuario = ${id_usuario})`,
+      imagen = '${imagen}', descripcion = '${descripcion}', id_usuario = ${id_usuario}) WHERE id = ${id}`,
       (error, rows, fields) => {
         if (error) {
           res.json({
@@ -311,7 +312,8 @@ app.delete("/eliminarAdopcion", (req, res) => {
 });
 
 app.patch("/modificarAdopcion", (req, res) => {
-  const {
+    const {
+      id,
     nombre,
     especie,
     raza,
@@ -331,7 +333,7 @@ app.patch("/modificarAdopcion", (req, res) => {
     `UPDATE mascotas_adopcion SET nombre = '${nombre}', especie = '${especie}', 
       raza = '${raza}', color = '${color}', edad = ${edad}, sexo = '${sexo}', ubicacion = '${ubicacion}',
       nombreContacto = '${nombreContacto}', telefonoContacto = '${telefonoContacto}', correoContacto = '${correoContacto}',
-      imagen = '${imagen}', descripcion = '${descripcion}', id_usuario = ${id_usuario})`,
+      imagen = '${imagen}', descripcion = '${descripcion}', id_usuario = ${id_usuario}) WHERE id = ${id}`,
     (error, rows, fields) => {
       if (error) {
         res.json({
