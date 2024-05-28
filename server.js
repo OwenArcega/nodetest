@@ -5,14 +5,13 @@ const cors = require('cors');
 const port = 3000;
 
 const mysql = require("mysql");
-const connection = mysql.createConnection({
+const pool = mysql.createPool({
+  connectionLimit: 100, // Número máximo de conexiones en el pool
   host: "sql5.freemysqlhosting.net",
   user: "sql5709784",
   password: "IRmREkCdxe",
-  database: "sql5709784",
+  database: "sql5709784"
 });
-
-connection.connect();
 
 app.use(express.json());
 app.use(cors());
@@ -68,7 +67,7 @@ app.post("/registrarPerdida", (req, res) => {
     descripcion,
   } = req.body;
 
-  connection.query(
+  pool.query(
     `INSERT INTO mascotas_perdidas(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion) 
     VALUES('${nombre}','${especie}','${raza}','${color}',${edad},'${sexo}','${ubicacion}','${nombreContacto}','${telefonoContacto}','${correoContacto}','${imagen}','${descripcion}')`,
     (error, rows, fields) => {
@@ -83,11 +82,13 @@ app.post("/registrarPerdida", (req, res) => {
         });
       }
     }
-  );
+    );
+    
+    connection.
 });
 
 app.get("/obtenerPerdidas", (req, res) => {
-  connection.query("SELECT * FROM mascotas_perdidas", (error, rows, fields) => {
+    pool.query("SELECT * FROM mascotas_perdidas", (error, rows, fields) => {
     if (error) {
       res.json({
         status: "error",
@@ -120,7 +121,7 @@ app.post("/registrarAdopcion", (req, res) => {
     descripcion,
   } = req.body;
 
-  connection.query(
+  pool.query(
     `INSERT INTO mascotas_adopcion(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion) 
     VALUES('${nombre}','${especie}','${raza}','${color}',${edad},'${sexo}','${ubicacion}','${nombreContacto}','${telefonoContacto}','${correoContacto}','${imagen}','${descripcion}')`,
     (error, rows, fields) => {
@@ -139,7 +140,7 @@ app.post("/registrarAdopcion", (req, res) => {
 });
 
 app.get('/obtenerAdopcion', (req, res) => {
-    connection.query("SELECT * FROM mascotas_adopcion", (error, rows, fields) => {
+    pool.query("SELECT * FROM mascotas_adopcion", (error, rows, fields) => {
       if (error) {
         res.json({
           status: "error",
@@ -163,7 +164,7 @@ app.post("/registrarUsuario", (req, res) => {
     contrasena
   } = req.body;
 
-  connection.query(
+  pool.query(
     `INSERT INTO usuario(usuario,correo,contrasena) 
     VALUES('${usuario}','${correo}','${contrasena}')`,
     (error, rows, fields) => {
@@ -183,7 +184,7 @@ app.post("/registrarUsuario", (req, res) => {
 
 
 app.get('/obtenerUsuarios', (req,res) => {
-    connection.query("SELECT * FROM usuarios", (error, rows, fields) => {
+    pool.query("SELECT * FROM usuarios", (error, rows, fields) => {
         if (error) {
             res.json({
                 status: "error",
