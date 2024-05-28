@@ -158,6 +158,43 @@ app.delete('/eliminarPerdida', (req, res) => {
     })
 })
 
+app.patch('/modificarPerdida', (req, res) => {
+    const {
+      nombre,
+      especie,
+      raza,
+      color,
+      edad,
+      sexo,
+      ubicacion,
+      nombreContacto,
+      telefonoContacto,
+      correoContacto,
+      imagen,
+      descripcion,
+      id_usuario,
+    } = req.body;
+
+    pool.query(
+        `UPDATE mascotas_perdidas SET nombre = '${nombre}', especie = '${especie}', 
+      raza = '${raza}', color = '${color}', edad = ${edad}, sexo = '${sexo}', ubicacion = '${ubicacion}',
+      nombreContacto = '${nombreContacto}', telefonoContacto = '${telefonoContacto}', correoContacto = '${correoContacto}',
+      imagen = '${imagen}', descripcion = '${descripcion}', id_usuario = ${id_usuario})`,
+      (error, rows, fields) => {
+        if (error) {
+          res.json({
+            status: "error",
+            error: error,
+          });
+        } else {
+          res.json({
+            status: "ok",
+          });
+        }
+      }
+    );
+})
+
 /////////////////////////////////////////////Mascotas en adopcion//////////////////////////////////////////
 
 app.post("/registrarAdopcion", (req, res) => {
@@ -273,6 +310,42 @@ app.delete("/eliminarAdopcion", (req, res) => {
   );
 });
 
+app.patch("/modificarAdopcion", (req, res) => {
+  const {
+    nombre,
+    especie,
+    raza,
+    color,
+    edad,
+    sexo,
+    ubicacion,
+    nombreContacto,
+    telefonoContacto,
+    correoContacto,
+    imagen,
+    descripcion,
+    id_usuario,
+  } = req.body;
+
+  pool.query(
+    `UPDATE mascotas_adopcion SET nombre = '${nombre}', especie = '${especie}', 
+      raza = '${raza}', color = '${color}', edad = ${edad}, sexo = '${sexo}', ubicacion = '${ubicacion}',
+      nombreContacto = '${nombreContacto}', telefonoContacto = '${telefonoContacto}', correoContacto = '${correoContacto}',
+      imagen = '${imagen}', descripcion = '${descripcion}', id_usuario = ${id_usuario})`,
+    (error, rows, fields) => {
+      if (error) {
+        res.json({
+          status: "error",
+          error: error,
+        });
+      } else {
+        res.json({
+          status: "ok",
+        });
+      }
+    }
+  );
+});
 
 //////////////////////////////////USUARIOS///////////////////////////////////////////////
 
