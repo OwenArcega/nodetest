@@ -197,7 +197,7 @@ app.get('/obtenerUsuarios', (req,res) => {
     });
 })
 
-app.get('/login', (req, res) => {
+app.post('/login', (req, res) => {
 
     const { nombre, contrasena } = req.body;
 
