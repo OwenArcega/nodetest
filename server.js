@@ -20,12 +20,14 @@ connection.query("SELECT 1 + 1 AS solution", (err, rows, fields) => {
 
 connection.end();
 
+app.use(express.json());
+
 app.get("/", (req, res) => {
   res.send("Hello world!");
 });
 
 app.post("/image", (req, res) => {
-  res.send(req.body);
+  res.send(req.body.hola);
 });
 
 app.listen(port, () => {
