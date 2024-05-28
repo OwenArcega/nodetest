@@ -29,7 +29,7 @@ app.get("/", (req, res) => {
 
 app.post("/publicarImagen", (req, res) => {
     res.json({
-        "status":"ok"
+        status:"ok"
     })
 //   const key = "6aafdbc3bdbc74f2192d1d3bb68aeb9f";
 //     const source = req.body.imagen;
