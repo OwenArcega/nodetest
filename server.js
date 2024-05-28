@@ -48,19 +48,15 @@ const publicarImagen = (data) => {
 
 app.post("/publicarImagen", (req, res) => {
   const url = publicarImagen(req.body.imagen);
-  if (!!url) {
-    res.send(
-      JSON.stringify({
-        status: "ok",
-      })
-    );
+  if (url) {
+    res.send({
+      status: "ok",
+    });
   } else {
-    res.send(
-      JSON.stringify({
-        status: "error",
-        error: "URL de imagen no creada",
-      })
-    );
+    res.send({
+      status: "error",
+      error: "URL de imagen no creada",
+    });
   }
 });
 
@@ -85,18 +81,14 @@ app.post("/registrarPerdida", (req, res) => {
     VALUES(${nombre},${especie},${raza},${color},${edad},${sexo},${ubicacion},${nombreContacto},${telefonoContacto},${correoContacto},${imagen},${descripcion})`,
     (error, rows, fields) => {
       if (error) {
-        res.send(
-          JSON.stringify({
-            status: "error",
-            error: error,
-          })
-        );
+        res.send({
+          status: "error",
+          error: error,
+        });
       } else {
-        res.send(
-          JSON.stringify({
-            status: "ok",
-          })
-        );
+        res.send({
+          status: "ok",
+        });
       }
     }
   );
