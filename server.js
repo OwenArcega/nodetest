@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const cors = require('cors');
 
 const port = 3000;
 
@@ -22,6 +23,7 @@ connection.query("SELECT 1 + 1 AS solution", (err, rows, fields) => {
 connection.end();
 
 app.use(express.json());
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Hello world!");
