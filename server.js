@@ -197,6 +197,26 @@ app.get('/obtenerUsuarios', (req,res) => {
     });
 })
 
+app.get('/login', (req, res) => {
+
+    const { nombre, contrasena } = req.body;
+
+    pool.query(`SELECT id FROM usuarios WHERE nombre = '${nombre}' AND contrasena = '${contrasena}'`,
+        (error, rows, fields) => {
+            if (error) {
+                res.json({
+                    status: "error",
+                    error: error
+                })
+            } else {
+                res.json({
+                    status: "ok",
+                    body: rows
+                })
+            }
+        })
+})
+
 
 app.listen(port, () => {
   console.log(`Example listening on port ${port}`);
