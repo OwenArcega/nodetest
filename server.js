@@ -49,20 +49,12 @@ const publicarImagen = (data) => {
 app.post("/publicarImagen", (req, res) => {
   const url = publicarImagen(req.body.imagen);
   if (url) {
-    res.send({
-      status: "ok",
-    });
+    res.send("ok");
   } else {
-    res.send({
-      status: "error",
-      error: "URL de imagen no creada",
-    });
+    res.send("Imagen no creada");
   }
 
-  res.send({
-    status: "error",
-    error: "No hizo nada",
-  });
+  res.send("no hizo nada");
 });
 
 app.post("/registrarPerdida", (req, res) => {
