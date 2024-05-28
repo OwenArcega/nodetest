@@ -14,12 +14,6 @@ const connection = mysql.createConnection({
 
 connection.connect();
 
-connection.query("SELECT 1 + 1 AS solution", (err, rows, fields) => {
-  if (err) throw err;
-
-  console.log("The solution is: ", rows[0].solution);
-});
-
 app.use(express.json());
 app.use(cors());
 
@@ -56,6 +50,8 @@ app.post("/publicarImagen", (req, res) => {
 //     .catch((error) => console.error("Error: " + error));
 });
 
+/////////////////////////////////////////////Mascotas perdidas//////////////////////////////////////////
+
 app.post("/registrarPerdida", (req, res) => {
   const {
     nombre,
@@ -89,6 +85,119 @@ app.post("/registrarPerdida", (req, res) => {
     }
   );
 });
+
+app.get("/obtenerPerdidas", (req, res) => {
+  connection.query("SELECT * FROM mascotas_perdidas", (error, rows, fields) => {
+    if (error) {
+      res.json({
+        status: "error",
+        error: error,
+      });
+    } else {
+      res.json({
+        status: "ok",
+        body: rows,
+      });
+    }
+  });
+});
+
+/////////////////////////////////////////////Mascotas en adopcion//////////////////////////////////////////
+
+app.post("/registrarAdopcion", (req, res) => {
+  const {
+    nombre,
+    especie,
+    raza,
+    color,
+    edad,
+    sexo,
+    ubicacion,
+    nombreContacto,
+    telefonoContacto,
+    correoContacto,
+    imagen,
+    descripcion,
+  } = req.body;
+
+  connection.query(
+    `INSERT INTO mascotas_adopcion(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion) 
+    VALUES('${nombre}','${especie}','${raza}','${color}',${edad},'${sexo}','${ubicacion}','${nombreContacto}','${telefonoContacto}','${correoContacto}','${imagen}','${descripcion}')`,
+    (error, rows, fields) => {
+      if (error) {
+        res.json({
+          status: "error",
+          error: error,
+        });
+      } else {
+        res.json({
+          status: "ok",
+        });
+      }
+    }
+  );
+});
+
+app.get('/obtenerAdopcion', (req, res) => {
+    connection.query("SELECT * FROM mascotas_adopcion", (error, rows, fields) => {
+      if (error) {
+        res.json({
+          status: "error",
+          error: error,
+        });
+      } else {
+        res.json({
+          status: "ok",
+          body: rows,
+        });
+      }
+    });
+})
+
+//////////////////////////////////USUARIOS///////////////////////////////////////////////
+
+app.post("/registrarUsuario", (req, res) => {
+  const {
+    usuario,
+    correo,
+    contrasena
+  } = req.body;
+
+  connection.query(
+    `INSERT INTO usuario(usuario,correo,contrasena) 
+    VALUES('${usuario}','${correo}','${contrasena}')`,
+    (error, rows, fields) => {
+      if (error) {
+        res.json({
+          status: "error",
+          error: error,
+        });
+      } else {
+        res.json({
+          status: "ok",
+        });
+      }
+    }
+  );
+});
+
+
+app.get('/obtenerUsuarios', (req,res) => {
+    connection.query("SELECT * FROM usuarios", (error, rows, fields) => {
+        if (error) {
+            res.json({
+                status: "error",
+                error: error
+            })
+        } else {
+            res.json({
+                status: "ok",
+                body: rows
+            });
+        }
+    });
+})
+
 
 app.listen(port, () => {
   console.log(`Example listening on port ${port}`);
