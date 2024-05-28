@@ -31,9 +31,14 @@ app.post("/publicarImagen", (req, res) => {
   const format = "json";
 
   fetch(
-    `https://freeimage.host/api/1/upload/?key=${key}&source=${req.body.imagen}&format=${format}`,
+    `https://freeimage.host/api/1/upload`,
     {
-      method: "POST",
+        method: "POST",
+        body: JSON.stringify({
+            "key": key,
+            "source": req.body.imagen,
+            "format": format
+        })
     }
   )
     .then((res) => res.json())
