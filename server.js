@@ -38,6 +38,7 @@ app.post("/publicarImagen", (req, res) => {
   )
     .then((res) => res.json())
     .then((data) => {
+      console.log(data);
       if (data.status_code == "200") {
         res.send(data.imagen.display_url);
       } else {
