@@ -1,4 +1,5 @@
 const express = require("express");
+const { json } = require("mocha/lib/reporters");
 const app = express();
 const port = 3000;
 
@@ -26,8 +27,81 @@ app.get("/", (req, res) => {
   res.send("Hello world!");
 });
 
-app.post("/image", (req, res) => {
-  res.send(req.body.hola);
+const publicarImagen = (data) => {
+  const key = "6d207e02198a847aa98d0a2a901485a5";
+  const data = data;
+  const format = "json";
+
+  fetch(
+    `https://freeimage.host/api/1/upload/?key=${key}&source=${data}&format=${format}`,
+    {
+      method: "POST",
+    }
+  )
+    .then((res) => JSON.parse(res))
+    .then((data) => {
+      if (data.success.code == "200") {
+        data.image.display_url;
+      } else {
+        return "";
+      }
+    });
+};
+
+app.post("/publicarImagen", (req, res) => {
+  const url = publicarImagen(req.body.imagen);
+  if (!!url) {
+    res.send(
+      JSON.stringify({
+        status: "ok",
+      })
+    );
+  } else {
+    res.send(
+      JSON.stringify({
+        status: "error",
+        error: "URL de imagen no creada",
+      })
+    );
+  }
+});
+
+app.post("/registrarPerdida", (req, res) => {
+  const {
+    nombre,
+    especie,
+    raza,
+    color,
+    edad,
+    sexo,
+    ubicacion,
+    nombreContacto,
+    telefonoContacto,
+    correoContacto,
+    imagen,
+    descripcion,
+  } = req.body;
+
+  connection.query(
+    `INSERT INTO mascotas_perdidas(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion) 
+    VALUES(${nombre},${especie},${raza},${color},${edad},${sexo},${ubicacion},${nombreContacto},${telefonoContacto},${correoContacto},${imagen},${descripcion})`,
+    (error, rows, fields) => {
+      if (error) {
+        res.send(
+          JSON.stringify({
+            status: "error",
+            error: error,
+          })
+        );
+      } else {
+        res.send(
+          JSON.stringify({
+            status: "ok",
+          })
+        );
+      }
+    }
+  );
 });
 
 app.listen(port, () => {
