@@ -39,7 +39,7 @@ const publicarImagen = (data) => {
     .then((res) => res.json())
     .then((data) => {
       if (data.success.code == "200") {
-        data.image.display_url;
+        return data.image.display_url;
       } else {
         return "";
       }
@@ -54,8 +54,6 @@ app.post("/publicarImagen", (req, res) => {
   } else {
     res.send("Imagen no creada");
   }
-
-  res.send("no hizo nada");
 });
 
 app.post("/registrarPerdida", (req, res) => {
