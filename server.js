@@ -1,12 +1,12 @@
-import express, { json } from "express";
+const express = require("express");
 const app = express();
-import fetch from "node-fetch";
-import FormData from "form-data";
+const fetch = require("node-fetch");
+const FormData = require("form-data");
 
 const port = 3000;
 
-import { createConnection } from "mysql";
-const connection = createConnection({
+const mysql = require("mysql");
+const connection = mysql.createConnection({
   host: "sql5.freemysqlhosting.net",
   user: "sql5709784",
   password: "IRmREkCdxe",
@@ -23,7 +23,7 @@ connection.query("SELECT 1 + 1 AS solution", (err, rows, fields) => {
 
 connection.end();
 
-app.use(json());
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Hello world!");
