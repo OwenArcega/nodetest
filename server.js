@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/image", (req, res) => {
-  res.send(req.query.hola);
+  res.send(req.body);
 });
 
 app.listen(port, () => {
