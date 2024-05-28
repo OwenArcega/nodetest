@@ -141,6 +141,23 @@ app.post("/obtenerPerdidasUsuario", (req, res) => {
   );
 });
 
+app.delete('/eliminarPerdida', (req, res) => {
+    const id = req.body.id;
+    pool.query(`DELETE FROM mascotas_perdidas WHERE id = ${id}`, (error, rows, fields) => {
+        if (error) {
+            res.json({
+                status: "error",
+                error: error
+            })
+        } else {
+            res.json({
+                status: "ok",
+                body: rows
+            })
+        }
+    })
+})
+
 /////////////////////////////////////////////Mascotas en adopcion//////////////////////////////////////////
 
 app.post("/registrarAdopcion", (req, res) => {
@@ -235,6 +252,27 @@ app.post("/obtenerAdopcionUsuario", (req, res) => {
     }
   );
 });
+
+app.delete("/eliminarAdopcion", (req, res) => {
+  const id = req.body.id;
+  pool.query(
+    `DELETE FROM mascotas_adopcion WHERE id = ${id}`,
+    (error, rows, fields) => {
+      if (error) {
+        res.json({
+          status: "error",
+          error: error,
+        });
+      } else {
+        res.json({
+          status: "ok",
+          body: rows,
+        });
+      }
+    }
+  );
+});
+
 
 //////////////////////////////////USUARIOS///////////////////////////////////////////////
 
