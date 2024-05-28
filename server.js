@@ -1,12 +1,10 @@
-import express, { json } from "express";
+const express = require("express");
 const app = express();
-import fetch from "node-fetch";
-import FormData from "form-data";
 
 const port = 3000;
 
-import { createConnection } from "mysql";
-const connection = createConnection({
+const mysql = require("mysql");
+const connection = mysql.createConnection({
   host: "sql5.freemysqlhosting.net",
   user: "sql5709784",
   password: "IRmREkCdxe",
@@ -23,35 +21,31 @@ connection.query("SELECT 1 + 1 AS solution", (err, rows, fields) => {
 
 connection.end();
 
-app.use(json());
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Hello world!");
 });
 
 app.post("/publicarImagen", (req, res) => {
-  const key = "6d207e02198a847aa98d0a2a901485a5";
+  const key = "XQAUmYKmVD85iA7rqP3vknVS8LaCiCS5";
   const format = "json";
     const source = req.body.imagen;
     
-      const form = new FormData();
-      form.append("key", key);
-      form.append("action", "upload");
-      form.append("source", source);
-      form.append("format", format);
-    
-  fetch(
-    `https://freeimage.host/api/1/upload`,
-    {
-        method: "POST",
-        body: form,
-        headers: form.getHeaders()
-    }
-  )
+  fetch(`https://www.imghippo.com/v1/upload`, {
+    method: "POST",
+    body: JSON.stringify({
+      api_key: key,
+      file: source,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
     .then((res) => res.json())
     .then((data) => {
       console.log(data);
-      if (data.status_code == "200") {
+      if (data.success) {
         res.send(data.imagen.display_url);
       } else {
         res.send("No se creo la imagen");
