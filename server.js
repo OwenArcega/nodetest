@@ -26,7 +26,7 @@ app.get("/", (req, res) => {
   res.send("Hello world!");
 });
 
-async function publicarImagen(data) {
+app.post("/publicarImagen", (req, res) => {
   const key = "6d207e02198a847aa98d0a2a901485a5";
   const format = "json";
 
@@ -39,21 +39,18 @@ async function publicarImagen(data) {
     .then((res) => res.json())
     .then((data) => {
       if (data.success.code == "200") {
-        return data.image.display_url;
+        res.send({
+          status: "ok",
+          res: data.imagen.display_url,
+        });
       } else {
-        return "";
+        res.send({
+          status: "error",
+          error: "No se creo la imagen",
+        });
       }
     })
     .catch((error) => console.error("Error: " + error));
-}
-
-app.post("/publicarImagen", async (req, res) => {
-  const url = await publicarImagen(req.body.imagen);
-  if (url) {
-    res.send("ok");
-  } else {
-    res.send("Imagen no creada");
-  }
 });
 
 app.post("/registrarPerdida", (req, res) => {
