@@ -43,7 +43,8 @@ const publicarImagen = (data) => {
       } else {
         return "";
       }
-    });
+    })
+    .catch((error) => console.error("Error: " + error));
 };
 
 app.post("/publicarImagen", (req, res) => {
