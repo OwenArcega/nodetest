@@ -28,15 +28,15 @@ app.get("/", (req, res) => {
 });
 
 app.post("/publicarImagen", (req, res) => {
-  const key = "XQAUmYKmVD85iA7rqP3vknVS8LaCiCS5";
+  const key = "6aafdbc3bdbc74f2192d1d3bb68aeb9f";
   const format = "json";
     const source = req.body.imagen;
     
-  fetch(`https://www.imghippo.com/v1/upload`, {
+  fetch("https://api.imgbb.com/1/upload", {
     method: "POST",
     body: JSON.stringify({
-      api_key: key,
-      file: source,
+      key: key,
+      image: source,
     }),
     headers: {
       "Content-Type": "application/json",
@@ -46,7 +46,7 @@ app.post("/publicarImagen", (req, res) => {
     .then((data) => {
       console.log(data);
       if (data.success) {
-        res.send(data.imagen.display_url);
+        res.send(data.data.url);
       } else {
         res.send("No se creo la imagen");
       }
