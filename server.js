@@ -38,7 +38,10 @@ app.post("/publicarImagen", (req, res) => {
             "key": key,
             "source": req.body.imagen,
             "format": format
-        })
+        }),
+        headers: {
+            "Content-Type":"application/json"
+        }
     }
   )
     .then((res) => res.json())
