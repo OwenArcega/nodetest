@@ -64,12 +64,13 @@ app.post("/registrarPerdida", (req, res) => {
     telefonoContacto,
     correoContacto,
     imagen,
-    descripcion,
+      descripcion,
+    id_usuario
   } = req.body;
 
   pool.query(
-    `INSERT INTO mascotas_perdidas(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion) 
-    VALUES('${nombre}','${especie}','${raza}','${color}',${edad},'${sexo}','${ubicacion}','${nombreContacto}','${telefonoContacto}','${correoContacto}','${imagen}','${descripcion}')`,
+    `INSERT INTO mascotas_perdidas(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion, id_usuario) 
+    VALUES('${nombre}','${especie}','${raza}','${color}',${edad},'${sexo}','${ubicacion}','${nombreContacto}','${telefonoContacto}','${correoContacto}','${imagen}','${descripcion}', ${id_usuario})`,
     (error, rows, fields) => {
       if (error) {
         res.json({
@@ -119,6 +120,27 @@ app.post('/obtenerMascotaPerdida', (req, res) => {
     })
 })
 
+app.post("/obtenerPerdidasUsuario", (req, res) => {
+  const id = req.body.id;
+
+  pool.query(
+    `SELECT * FROM mascotas_perdidas WHERE id_usuario = ${id}`,
+    (error, rows, fields) => {
+      if (error) {
+        res.json({
+          status: "error",
+          error: error,
+        });
+      } else {
+        res.json({
+          status: "ok",
+          body: rows,
+        });
+      }
+    }
+  );
+});
+
 /////////////////////////////////////////////Mascotas en adopcion//////////////////////////////////////////
 
 app.post("/registrarAdopcion", (req, res) => {
@@ -134,12 +156,13 @@ app.post("/registrarAdopcion", (req, res) => {
     telefonoContacto,
     correoContacto,
     imagen,
-    descripcion,
+      descripcion,
+    id_usuario
   } = req.body;
 
   pool.query(
-    `INSERT INTO mascotas_adopcion(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion) 
-    VALUES('${nombre}','${especie}','${raza}','${color}',${edad},'${sexo}','${ubicacion}','${nombreContacto}','${telefonoContacto}','${correoContacto}','${imagen}','${descripcion}')`,
+    `INSERT INTO mascotas_adopcion(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion, id_usuario) 
+    VALUES('${nombre}','${especie}','${raza}','${color}',${edad},'${sexo}','${ubicacion}','${nombreContacto}','${telefonoContacto}','${correoContacto}','${imagen}','${descripcion}', ${id_usuario})`,
     (error, rows, fields) => {
       if (error) {
         res.json({
@@ -176,6 +199,27 @@ app.post("/obtenerMascotaAdopcion", (req, res) => {
 
   pool.query(
     `SELECT * FROM mascotas_adopcion WHERE id = ${id}`,
+    (error, rows, fields) => {
+      if (error) {
+        res.json({
+          status: "error",
+          error: error,
+        });
+      } else {
+        res.json({
+          status: "ok",
+          body: rows,
+        });
+      }
+    }
+  );
+});
+
+app.post("/obtenerAdopcionUsuario", (req, res) => {
+  const id = req.body.id;
+
+  pool.query(
+    `SELECT * FROM mascotas_perdidas WHERE id_usuario = ${id}`,
     (error, rows, fields) => {
       if (error) {
         res.json({
