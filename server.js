@@ -199,7 +199,7 @@ app.get('/obtenerUsuarios', (req,res) => {
 
 app.post('/login', (req, res) => {
 
-    const { nombre, contrasena } = req.body;
+    const { usuario, contrasena } = req.body;
 
     pool.query(`SELECT id FROM usuarios WHERE nombre = '${usuario}' AND contrasena = '${contrasena}'`,
         (error, rows, fields) => {
