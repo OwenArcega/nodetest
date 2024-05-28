@@ -35,9 +35,9 @@ app.post("/publicarImagen", (req, res) => {
     {
         method: "POST",
         body: JSON.stringify({
-            "key": key,
-            "source": req.body.imagen,
-            "format": format
+            key: key,
+            source: req.body.imagen,
+            format: format
         }),
         headers: {
             "Content-Type":"application/json"
