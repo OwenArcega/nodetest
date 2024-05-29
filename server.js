@@ -180,7 +180,7 @@ app.patch('/modificarPerdida', (req, res) => {
         `UPDATE mascotas_perdidas SET nombre = '${nombre}', especie = '${especie}', 
       raza = '${raza}', color = '${color}', edad = ${edad}, sexo = '${sexo}', ubicacion = '${ubicacion}',
       nombreContacto = '${nombreContacto}', telefonoContacto = '${telefonoContacto}', correoContacto = '${correoContacto}',
-      imagen = '${imagen}', descripcion = '${descripcion}', id_usuario = ${id_usuario}) WHERE id = ${id}`,
+      imagen = '${imagen}', descripcion = '${descripcion}', id_usuario = ${id_usuario} WHERE id = ${id}`,
       (error, rows, fields) => {
         if (error) {
           res.json({
