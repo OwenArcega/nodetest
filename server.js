@@ -21,35 +21,6 @@ app.get("/", (req, res) => {
   res.send("Hello world!");
 });
 
-app.post("/publicarImagen", (req, res) => {
-    res.json({
-        status:"ok"
-    })
-//   const key = "6aafdbc3bdbc74f2192d1d3bb68aeb9f";
-//     const source = req.body.imagen;
-    
-//   fetch("https://api.imgbb.com/1/upload", {
-//     method: "POST",
-//     body: JSON.stringify({
-//       key: key,
-//       image: source,
-//     }),
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   })
-//     .then((res) => res.json())
-//     .then((data) => {
-//       console.log(data);
-//       if (data.success) {
-//         res.send(data.data.url);
-//       } else {
-//         res.send("No se creo la imagen");
-//       }
-//     })
-//     .catch((error) => console.error("Error: " + error));
-});
-
 /////////////////////////////////////////////Mascotas perdidas//////////////////////////////////////////
 
 app.post("/registrarPerdida", (req, res) => {
@@ -69,7 +40,7 @@ app.post("/registrarPerdida", (req, res) => {
     id_usuario
   } = req.body;
 
-  console.log(descripcion)
+  console.log(imagen);
   // pool.query(
   //   `INSERT INTO mascotas_perdidas(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion, id_usuario) 
   //   VALUES('${nombre}','${especie}','${raza}','${color}',${edad},'${sexo}','${ubicacion}','${nombreContacto}','${telefonoContacto}','${correoContacto}','${imagen}','${descripcion}', ${id_usuario})`,
