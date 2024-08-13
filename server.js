@@ -4,13 +4,14 @@ const cors = require('cors');
 
 const port = 3000;
 
-const mysql = require("mysql");
+const mysql = require("mysql2");
 const pool = mysql.createPool({
   connectionLimit: 100,
-  host: "sql5.freemysqlhosting.net",
-  user: "sql5709784",
-  password: "IRmREkCdxe",
-  database: "sql5709784"
+  host: "mysql-c75ed23-ucol-8f58.k.aivencloud.com",
+  user: "avnadmin",
+  password: "AVNS_WRoYmbd4GIyVZEMfxDg",
+  database: "defaultdb",
+  port: 11456,
 });
 
 app.use(express.json());
@@ -410,7 +411,7 @@ app.post('/login', (req, res) => {
             } else {
                 res.json({
                     status: "ok",
-                    body: rows
+                  body: rows
                 })
             }
         })
