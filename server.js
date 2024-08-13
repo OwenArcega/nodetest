@@ -4,13 +4,14 @@ const cors = require('cors');
 
 const port = 3000;
 
-const mysql = require("mysql");
+const mysql = require("mysql2");
 const pool = mysql.createPool({
-  connectionLimit: 100, // Número máximo de conexiones en el pool
-  host: "sql5.freemysqlhosting.net",
-  user: "sql5709784",
-  password: "IRmREkCdxe",
-  database: "sql5709784"
+  connectionLimit: 100,
+  host: "mysql-c75ed23-ucol-8f58.k.aivencloud.com",
+  user: "avnadmin",
+  password: "AVNS_WRoYmbd4GIyVZEMfxDg",
+  database: "defaultdb",
+  port: 11456,
 });
 
 app.use(express.json());
@@ -64,26 +65,27 @@ app.post("/registrarPerdida", (req, res) => {
     telefonoContacto,
     correoContacto,
     imagen,
-      descripcion,
+    descripcion,
     id_usuario
   } = req.body;
 
-  pool.query(
-    `INSERT INTO mascotas_perdidas(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion, id_usuario) 
-    VALUES('${nombre}','${especie}','${raza}','${color}',${edad},'${sexo}','${ubicacion}','${nombreContacto}','${telefonoContacto}','${correoContacto}','${imagen}','${descripcion}', ${id_usuario})`,
-    (error, rows, fields) => {
-      if (error) {
-        res.json({
-          status: "error",
-          error: error,
-        });
-      } else {
-        res.json({
-          status: "ok",
-        });
-      }
-    }
-    );
+  console.log(descripcion)
+  // pool.query(
+  //   `INSERT INTO mascotas_perdidas(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion, id_usuario) 
+  //   VALUES('${nombre}','${especie}','${raza}','${color}',${edad},'${sexo}','${ubicacion}','${nombreContacto}','${telefonoContacto}','${correoContacto}','${imagen}','${descripcion}', ${id_usuario})`,
+  //   (error, rows, fields) => {
+  //     if (error) {
+  //       res.json({
+  //         status: "error",
+  //         error: error,
+  //       });
+  //     } else {
+  //       res.json({
+  //         status: "ok",
+  //       });
+  //     }
+  //   }
+  //   );
 });
 
 app.get("/obtenerPerdidas", (req, res) => {
@@ -409,7 +411,7 @@ app.post('/login', (req, res) => {
             } else {
                 res.json({
                     status: "ok",
-                    body: rows
+                  body: rows
                 })
             }
         })
