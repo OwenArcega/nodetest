@@ -30,23 +30,23 @@ app.post("/publicarImagen", (req, res) => {
 /////////////////////////////////////////////Mascotas perdidas//////////////////////////////////////////
 
 app.post("/registrarPerdida", (req, res) => {
-  const {
-    nombre,
-    especie,
-    raza,
-    color,
-    edad,
-    sexo,
-    ubicacion,
-    nombreContacto,
-    telefonoContacto,
-    correoContacto,
-    imagen,
-    descripcion,
-    id_usuario
-  } = req.body;
+  // const {
+  //   nombre,
+  //   especie,
+  //   raza,
+  //   color,
+  //   edad,
+  //   sexo,
+  //   ubicacion,
+  //   nombreContacto,
+  //   telefonoContacto,
+  //   correoContacto,
+  //   imagen,
+  //   descripcion,
+  //   id_usuario
+  // } = req.body;
 
-  console.log(imagen)
+  console.log(req.body[0])
   // pool.query(
   //   `INSERT INTO mascotas_perdidas(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion, id_usuario) 
   //   VALUES('${nombre}','${especie}','${raza}','${color}',${edad},'${sexo}','${ubicacion}','${nombreContacto}','${telefonoContacto}','${correoContacto}','${imagen}','${descripcion}', ${id_usuario})`,
