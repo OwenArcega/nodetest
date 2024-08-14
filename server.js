@@ -375,9 +375,6 @@ app.get('/obtenerUsuarios', (req,res) => {
 app.post('/login', (req, res) => {
 
     const { nombre, contrasena } = req.body;
-
-    console.log("usuario: " + nombre);
-    console.log("contrasena" + contrasena);
     pool.query(`SELECT id FROM usuarios WHERE usuario = '${nombre}' AND contrasena = '${contrasena}'`,
         (error, rows, fields) => {
             if (error) {
@@ -387,7 +384,7 @@ app.post('/login', (req, res) => {
                 })
             } else {
                 res.json({
-                    status: "ok",
+                  status: "ok",
                   body: rows
                 })
             }
