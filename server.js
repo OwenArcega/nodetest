@@ -46,7 +46,7 @@ app.post("/registrarPerdida", (req, res) => {
   //   descripcion,
   //   id_usuario
   // } = req.body;
-  console.log(req)
+  console.log(req.body)
   // pool.query(
   //   `INSERT INTO mascotas_perdidas(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion, id_usuario) 
   //   VALUES('${nombre}','${especie}','${raza}','${color}',${edad},'${sexo}','${ubicacion}','${nombreContacto}','${telefonoContacto}','${correoContacto}','${imagen}','${descripcion}', ${id_usuario})`,
