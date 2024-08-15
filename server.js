@@ -31,38 +31,49 @@ app.post("/publicarImagen", (req, res) => {
 /////////////////////////////////////////////Mascotas perdidas//////////////////////////////////////////
 
 app.post("/registrarPerdida", (req, res) => {
-  // const {
-  //   nombre,
-  //   especie,
-  //   raza,
-  //   color,
-  //   edad,
-  //   sexo,
-  //   ubicacion,
-  //   nombreContacto,
-  //   telefonoContacto,
-  //   correoContacto,
-  //   imagen,
-  //   descripcion,
-  //   id_usuario
-  // } = req.body;
-  console.log(req.body)
-  // pool.query(
-  //   `INSERT INTO mascotas_perdidas(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion, id_usuario) 
-  //   VALUES('${nombre}','${especie}','${raza}','${color}',${edad},'${sexo}','${ubicacion}','${nombreContacto}','${telefonoContacto}','${correoContacto}','${imagen}','${descripcion}', ${id_usuario})`,
-  //   (error, rows, fields) => {
-  //     if (error) {
-  //       res.json({
-  //         status: "error",
-  //         error: error,
-  //       });
-  //     } else {
-  //       res.json({
-  //         status: "ok",
-  //       });
-  //     }
-  //   }
-  //   );
+  const {
+    nombre,
+    especie,
+    raza,
+    color,
+    edad,
+    sexo,
+    ubicacion,
+    nombreContacto,
+    telefonoContacto,
+    correoContacto,
+    imagen,
+    descripcion,
+    id_usuario
+  } = req.body;
+
+  fetch("https://api.imgbb.com/1/upload", {
+    method: "POST",
+    body: {
+      key: "6aafdbc3bdbc74f2192d1d3bb68aeb9f",
+      image: imagen
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      let url = data.data.url;
+      pool.query(
+        `INSERT INTO mascotas_perdidas(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion, id_usuario) 
+        VALUES('${nombre}','${especie}','${raza}','${color}',${edad},'${sexo}','${ubicacion}','${nombreContacto}','${telefonoContacto}','${correoContacto}','${url}','${descripcion}', ${id_usuario})`,
+        (error, rows, fields) => {
+          if (error) {
+            res.json({
+              status: "error",
+              error: error,
+            });
+          } else {
+            res.json({
+              status: "ok",
+            });
+          }
+        }
+        );
+  })
 });
 
 app.get("/obtenerPerdidas", (req, res) => {
