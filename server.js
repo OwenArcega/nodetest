@@ -68,7 +68,7 @@ app.post("/registrarPerdida", (req, res) => {
       //       });
       //     }
       //   }
-      );
+      // );
     });
 });
 
