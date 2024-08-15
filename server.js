@@ -22,12 +22,6 @@ app.get("/", (req, res) => {
   res.send("Hello world!");
 });
 
-app.post("/publicarImagen", (req, res) => {
-    res.json({
-        status:"ok"
-    })
-});
-
 /////////////////////////////////////////////Mascotas perdidas//////////////////////////////////////////
 
 app.post("/registrarPerdida", (req, res) => {
@@ -56,6 +50,7 @@ app.post("/registrarPerdida", (req, res) => {
   })
     .then((res) => res.json())
     .then((data) => {
+      console.log(data);
       let url = data.data.url;
       pool.query(
         `INSERT INTO mascotas_perdidas(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion, id_usuario) 
