@@ -41,9 +41,10 @@ app.post("/registrarPerdida", (req, res) => {
     id_usuario
   } = req.body;
 
-  fetch("https://api.imgbb.com/1/upload?key=6aafdbc3bdbc74f2192d1d3bb68aeb9f", {
+  fetch("https://api.imgbb.com/1/upload", {
     method: "POST",
     body: {
+      key: "6aafdbc3bdbc74f2192d1d3bb68aeb9f",
       image: imagen,
     },
   })
