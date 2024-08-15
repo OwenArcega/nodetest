@@ -41,7 +41,6 @@ app.post("/registrarPerdida", (req, res) => {
     id_usuario
   } = req.body;
 
-  console.log(req.body);
   fetch("https://api.imgbb.com/1/upload?key=6aafdbc3bdbc74f2192d1d3bb68aeb9f", {
     method: "POST",
     body: {
@@ -50,7 +49,7 @@ app.post("/registrarPerdida", (req, res) => {
   })
     .then((res) => res.json())
     .then((data) => {
-      console.log(data);
+      console.log("respuesta del servidor de imagenes:" + data);
       let url = data.data.url;
       pool.query(
         `INSERT INTO mascotas_perdidas(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion, id_usuario) 
