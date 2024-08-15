@@ -50,22 +50,24 @@ app.post("/registrarPerdida", (req, res) => {
     .then((res) => res.json())
     .then((data) => {
       console.log("respuesta del servidor de imagenes:" + data);
-      let url = data.data.url;
-      pool.query(
-        `INSERT INTO mascotas_perdidas(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion, id_usuario) 
-        VALUES('${nombre}','${especie}','${raza}','${color}',${edad},'${sexo}','${ubicacion}','${nombreContacto}','${telefonoContacto}','${correoContacto}','${url}','${descripcion}', ${id_usuario})`,
-        (error, rows, fields) => {
-          if (error) {
-            res.json({
-              status: "error",
-              error: error,
-            });
-          } else {
-            res.json({
-              status: "ok",
-            });
-          }
-        }
+      res.json({
+        respuesta: data
+      })
+      // pool.query(
+      //   `INSERT INTO mascotas_perdidas(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion, id_usuario) 
+      //   VALUES('${nombre}','${especie}','${raza}','${color}',${edad},'${sexo}','${ubicacion}','${nombreContacto}','${telefonoContacto}','${correoContacto}','${url}','${descripcion}', ${id_usuario})`,
+      //   (error, rows, fields) => {
+      //     if (error) {
+      //       res.json({
+      //         status: "error",
+      //         error: error,
+      //       });
+      //     } else {
+      //       res.json({
+      //         status: "ok",
+      //       });
+      //     }
+      //   }
       );
     });
 });
