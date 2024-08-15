@@ -41,35 +41,35 @@ app.post("/registrarPerdida", (req, res) => {
     id_usuario
   } = req.body;
 
-  fetch("https://api.imgbb.com/1/upload?key=6aafdbc3bdbc74f2192d1d3bb68aeb9f", {
+  const imageFormData = new FormData();
+  imageFormData.append("key", "6aafdbc3bdbc74f2192d1d3bb68aeb9f");
+  imageFormData.append("image", imagen);
+
+  const imageRequestOptions = {
     method: "POST",
-    body: {
-      image: imagen,
-    },
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log("respuesta del servidor de imagenes:" + data);
-      res.json({
-        respuesta: data,
+    body: imageFormData,
+  }
+
+  fetch("https://api.imgbb.com/1/upload?key=6aafdbc3bdbc74f2192d1d3bb68aeb9f", imageRequestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      let url = result.data.url;
+      pool.query(
+        `INSERT INTO mascotas_perdidas(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion, id_usuario)
+        VALUES('${nombre}','${especie}','${raza}','${color}',${edad},'${sexo}','${ubicacion}','${nombreContacto}','${telefonoContacto}','${correoContacto}','${url}','${descripcion}', ${id_usuario})`,
+        (error, rows, fields) => {
+          if (error) {
+            res.json({
+              status: "error",
+              error: error,
+            });
+          } else {
+            res.json({
+              status: "ok",
+            });
+          }
+        });
       });
-      // pool.query(
-      //   `INSERT INTO mascotas_perdidas(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion, id_usuario)
-      //   VALUES('${nombre}','${especie}','${raza}','${color}',${edad},'${sexo}','${ubicacion}','${nombreContacto}','${telefonoContacto}','${correoContacto}','${url}','${descripcion}', ${id_usuario})`,
-      //   (error, rows, fields) => {
-      //     if (error) {
-      //       res.json({
-      //         status: "error",
-      //         error: error,
-      //       });
-      //     } else {
-      //       res.json({
-      //         status: "ok",
-      //       });
-      //     }
-      //   }
-      // );
-    });
 });
 
 app.get("/obtenerPerdidas", (req, res) => {
