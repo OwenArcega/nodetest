@@ -50,7 +50,7 @@ app.post("/registrarPerdida", (req, res) => {
     body: imageFormData,
   }
 
-  fetch("https://api.imgbb.com/1/upload?key=6aafdbc3bdbc74f2192d1d3bb68aeb9f", imageRequestOptions)
+  fetch("https://api.imgbb.com/1/upload", imageRequestOptions)
     .then((response) => response.json())
     .then((result) => {
       let url = result.data.url;
