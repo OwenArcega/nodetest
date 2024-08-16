@@ -46,33 +46,36 @@ app.post("/registrarPerdida", (req, res) => {
   imageFormData.append("image", imagen);
 
   console.log(imagen);
+  res.json({
+    res: imagen
+  })
 
-  const imageRequestOptions = {
-    method: "POST",
-    body: imageFormData,
-  }
+  // const imageRequestOptions = {
+  //   method: "POST",
+  //   body: imageFormData,
+  // }
 
-  fetch("https://api.imgbb.com/1/upload", imageRequestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-      console.log(result);
-      let url = result.data.url;
-      pool.query(
-        `INSERT INTO mascotas_perdidas(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion, id_usuario)
-        VALUES('${nombre}','${especie}','${raza}','${color}',${edad},'${sexo}','${ubicacion}','${nombreContacto}','${telefonoContacto}','${correoContacto}','${url}','${descripcion}', ${id_usuario})`,
-        (error, rows, fields) => {
-          if (error) {
-            res.json({
-              status: "error",
-              error: error,
-            });
-          } else {
-            res.json({
-              status: "ok",
-            });
-          }
-        });
-      });
+  // fetch("https://api.imgbb.com/1/upload", imageRequestOptions)
+  //   .then((response) => response.json())
+  //   .then((result) => {
+  //     console.log(result);
+  //     let url = result.data.url;
+  //     pool.query(
+  //       `INSERT INTO mascotas_perdidas(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion, id_usuario)
+  //       VALUES('${nombre}','${especie}','${raza}','${color}',${edad},'${sexo}','${ubicacion}','${nombreContacto}','${telefonoContacto}','${correoContacto}','${url}','${descripcion}', ${id_usuario})`,
+  //       (error, rows, fields) => {
+  //         if (error) {
+  //           res.json({
+  //             status: "error",
+  //             error: error,
+  //           });
+  //         } else {
+  //           res.json({
+  //             status: "ok",
+  //           });
+  //         }
+  //       });
+  //     });
 });
 
 app.get("/obtenerPerdidas", (req, res) => {
