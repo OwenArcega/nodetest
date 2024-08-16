@@ -5,6 +5,7 @@ const cors = require('cors');
 const port = 3000;
 
 const mysql = require("mysql2");
+const { type } = require("mocha/lib/utils");
 const pool = mysql.createPool({
   connectionLimit: 100,
   host: "mysql-c75ed23-ucol-8f58.k.aivencloud.com",
@@ -44,6 +45,8 @@ app.post("/registrarPerdida", (req, res) => {
   const imageFormData = new FormData();
   imageFormData.append("key", "6aafdbc3bdbc74f2192d1d3bb68aeb9f");
   imageFormData.append("image", imagen);
+
+  console.log(imagen);
 
   const imageRequestOptions = {
     method: "POST",
