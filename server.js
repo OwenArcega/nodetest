@@ -5,7 +5,6 @@ const cors = require('cors');
 const port = 3000;
 
 const mysql = require("mysql2");
-const { type } = require("mocha/lib/utils");
 const pool = mysql.createPool({
   connectionLimit: 100,
   host: "mysql-c75ed23-ucol-8f58.k.aivencloud.com",
