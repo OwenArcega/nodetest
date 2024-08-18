@@ -45,9 +45,8 @@ app.post("/registrarPerdida", (req, res) => {
   imageFormData.append("key", "6aafdbc3bdbc74f2192d1d3bb68aeb9f");
   imageFormData.append("image", imagen);
 
-  console.log(imagen);
   res.json({
-    res: imagen
+    res: imageFormData.get("image")
   })
 
   // const imageRequestOptions = {
