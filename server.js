@@ -199,26 +199,40 @@ app.post("/registrarAdopcion", (req, res) => {
     telefonoContacto,
     correoContacto,
     imagen,
-      descripcion,
+    descripcion,
     id_usuario
   } = req.body;
 
-  pool.query(
-    `INSERT INTO mascotas_adopcion(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion, id_usuario) 
-    VALUES('${nombre}','${especie}','${raza}','${color}',${edad},'${sexo}','${ubicacion}','${nombreContacto}','${telefonoContacto}','${correoContacto}','${imagen}','${descripcion}', ${id_usuario})`,
-    (error, rows, fields) => {
-      if (error) {
-        res.json({
-          status: "error",
-          error: error,
-        });
-      } else {
-        res.json({
-          status: "ok",
-        });
-      }
-    }
-  );
+  const imageFormData = new FormData();
+  imageFormData.append("key", "6aafdbc3bdbc74f2192d1d3bb68aeb9f");
+  imageFormData.append("image", imagen);
+
+  const imageRequestOptions = {
+    method: "POST",
+    body: imageFormData,
+  };
+  
+  fetch("https://api.imgbb.com/1/upload", imageRequestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      let url = result.data.url;
+      pool.query(
+        `INSERT INTO mascotas_adopcion(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion, id_usuario) 
+    VALUES('${nombre}','${especie}','${raza}','${color}',${edad},'${sexo}','${ubicacion}','${nombreContacto}','${telefonoContacto}','${correoContacto}','${url}','${descripcion}', ${id_usuario})`,
+        (error, rows, fields) => {
+          if (error) {
+            res.json({
+              status: "error",
+              error: error,
+            });
+          } else {
+            res.json({
+              status: "ok",
+            });
+          }
+        }
+      );
+    });
 });
 
 app.get('/obtenerAdopcion', (req, res) => {
