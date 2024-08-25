@@ -329,24 +329,39 @@ app.patch("/modificarAdopcion", (req, res) => {
     id_usuario,
   } = req.body;
 
-  pool.query(
-    `UPDATE mascotas_adopcion SET nombre = '${nombre}', especie = '${especie}', 
+    const imageFormData = new FormData();
+    imageFormData.append("key", "6aafdbc3bdbc74f2192d1d3bb68aeb9f");
+    imageFormData.append("image", imagen);
+
+    const imageRequestOptions = {
+      method: "POST",
+      body: imageFormData,
+    };
+
+  fetch("https://api.imgbb.com/1/upload", imageRequestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      let url = result.data.url;
+  
+      pool.query(
+        `UPDATE mascotas_adopcion SET nombre = '${nombre}', especie = '${especie}', 
       raza = '${raza}', color = '${color}', edad = ${edad}, sexo = '${sexo}', ubicacion = '${ubicacion}',
       nombreContacto = '${nombreContacto}', telefonoContacto = '${telefonoContacto}', correoContacto = '${correoContacto}',
-      imagen = '${imagen}', descripcion = '${descripcion}', id_usuario = ${id_usuario}) WHERE id = ${id}`,
-    (error, rows, fields) => {
-      if (error) {
-        res.json({
-          status: "error",
-          error: error,
-        });
-      } else {
-        res.json({
-          status: "ok",
-        });
-      }
-    }
-  );
+      imagen = '${url}', descripcion = '${descripcion}', id_usuario = ${id_usuario} WHERE id = ${id}`,
+        (error, rows, fields) => {
+          if (error) {
+            res.json({
+              status: "error",
+              error: error,
+            });
+          } else {
+            res.json({
+              status: "ok",
+            });
+          }
+        }
+      );
+    });
 });
 
 //////////////////////////////////USUARIOS///////////////////////////////////////////////
