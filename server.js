@@ -438,7 +438,7 @@ app.post("/mascotaIdeal", (req, res) => {
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 async function run() {
-  const prompt = "De acuerdo a las siguientes mascotas: ${mascotas} encuentra a la ideal para el usuario con las siguientes preferencias: ${resultados}, regresame la mascota ideal únicamente en json.;
+  const prompt = "De acuerdo a las siguientes mascotas: ${mascotas} encuentra a la ideal para el usuario con las siguientes preferencias: ${resultados}, regresame la mascota ideal únicamente en json.";
 
   const result = await model.generateContent(prompt);
   const response = await result.response;
