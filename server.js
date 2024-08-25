@@ -41,17 +41,6 @@ app.post("/registrarPerdida", (req, res) => {
     id_usuario
   } = req.body;
 
-  const imageFormData = new FormData();
-  imageFormData.append("key", "6aafdbc3bdbc74f2192d1d3bb68aeb9f");
-  imageFormData.append(
-    "image", imagen
-  );
-
-  const imageRequestOptions = {
-    method: "POST",
-    body: imageFormData,
-  }
-
   fetch("https://api.imgbb.com/1/upload", imageRequestOptions)
     .then((response) => response.json())
     .then((result) => {
@@ -276,7 +265,7 @@ app.post("/obtenerAdopcionUsuario", (req, res) => {
   const id = req.body.id;
 
   pool.query(
-    `SELECT * FROM mascotas_perdidas WHERE id_usuario = ${id}`,
+    `SELECT * FROM mascotas_adopcion WHERE id_usuario = ${id}`,
     (error, rows, fields) => {
       if (error) {
         res.json({
