@@ -446,11 +446,17 @@ app.post("/mascotaIdeal", (req, res) => {
               const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
             
             async function run() {
-              const prompt = `De acuerdo a las siguientes mascotas: ${mascotas} encuentra a la ideal para el usuario con las siguientes preferencias únicamente usando las mascotas dadas: ${preferencias}, regresame la mascota ideal en formato json, si no se encuentra una ideal, regresa la más cercana o la única disponible. Usa solamente la información que tengas según cada raza de animal, haz inferencias para encontrar la mascota ideal con la información dada y nada más, creale caractersíticas necesarias para que puedas hacer la evaluación con las mascotas dadas.`;
+              // let prompt = `De acuerdo a las siguientes mascotas: ${mascotas} encuentra a la ideal para el usuario con las siguientes preferencias únicamente usando las mascotas dadas: ${preferencias}, regresame la mascota ideal en formato json, si no se encuentra una ideal, regresa la más cercana o la única disponible. Usa solamente la información que tengas según cada raza de animal, haz inferencias para encontrar la mascota ideal con la información dada y nada más, creale caractersíticas necesarias para que puedas hacer la evaluación con las mascotas dadas.`;
             
-              const result = await model.generateContent(prompt);
-              const response = await result.response;
-              const text = response.text();
+              // let result = await model.generateContent(prompt);
+              // let response = await result.response;
+              // let text = response.text();
+
+              let prompt = `De acuerdo a las siguientes mascotas: ${mascotas}, agrega las siguientes caracteristicas a cada mascota según su raza en formato json.`;
+              let result = await model.generateContent(prompt);
+              let response = await result.response;
+              let text = response.text();
+
               console.log(text)
             }
             run();
