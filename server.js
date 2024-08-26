@@ -430,8 +430,9 @@ app.post('/login', (req, res) => {
 app.post("/mascotaIdeal", (req, res) => {
   const { answers } = req.body;
   
-   pool.query(`SELECT id FROM usuarios WHERE usuario = '${nombre}' AND contrasena = '${contrasena}'`,
-        (error, rows, fields) => {
+   pool.query(`SELECT * FROM mascotas_adopcion WHERE ubicacion LIKE '${answers.ubicacion}'`,
+     (error, rows, fields) => {
+          console.log(rows)
             if (error) {
                 res.json({
                     status: "error",
