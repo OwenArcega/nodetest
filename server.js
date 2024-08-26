@@ -433,8 +433,6 @@ app.post("/mascotaIdeal", (req, res) => {
   const preferencias = answers;
    pool.query(`SELECT * FROM mascotas_adopcion WHERE ubicacion LIKE '%${estado}%'`,
      (error, rows, fields) => {
-       console.log(rows);
-       console.log(preferencias);
             if (error) {
                 res.json({
                     status: "error",
@@ -448,7 +446,7 @@ app.post("/mascotaIdeal", (req, res) => {
               const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
             
             async function run() {
-              const prompt = `De acuerdo a las siguientes mascotas: ${mascotas} encuentra a la ideal para el usuario con las siguientes preferencias únicamente usando las mascotas dadas: ${preferencias}, regresame la mascota ideal en formato json, si no se encuentra una ideal, regresa la más cercana o la única disponible. Usa solamente la información que tengas según cada raza de animal, haz inferencias para encontrar la mascota ideal con la información dada y nada más.`;
+              const prompt = `De acuerdo a las siguientes mascotas: ${mascotas} encuentra a la ideal para el usuario con las siguientes preferencias únicamente usando las mascotas dadas: ${preferencias}, regresame la mascota ideal en formato json, si no se encuentra una ideal, regresa la más cercana o la única disponible. Usa solamente la información que tengas según cada raza de animal, haz inferencias para encontrar la mascota ideal con la información dada y nada más, creale caractersíticas necesarias para que puedas hacer la evaluación con las mascotas dadas.`;
             
               const result = await model.generateContent(prompt);
               const response = await result.response;
