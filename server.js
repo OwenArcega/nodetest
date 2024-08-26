@@ -453,7 +453,8 @@ app.post("/mascotaIdeal", (req, res) => {
               // let response = await result.response;
               // let text = response.text();
               console.log(mascotas);
-              let prompt = `Que contiene este json?: ${mascotas[0]}`;
+              console.log(mascotas[0])
+              let prompt = `Que contiene este json?: ${mascotas[0].json()}`;
               let result = await model.generateContent(prompt);
               let response = await result.response;
               let text = response.text();
