@@ -433,6 +433,8 @@ app.post("/mascotaIdeal", (req, res) => {
   const preferencias = answers;
    pool.query(`SELECT * FROM mascotas_adopcion WHERE ubicacion LIKE '%${estado}%'`,
      (error, rows, fields) => {
+       console.log(rows);
+       console.log(preferencias);
             if (error) {
                 res.json({
                     status: "error",
