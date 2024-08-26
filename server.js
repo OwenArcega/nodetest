@@ -429,7 +429,7 @@ app.post('/login', (req, res) => {
 
 app.post("/mascotaIdeal", (req, res) => {
   const { answers } = req.body;
-   pool.query(`SELECT * FROM mascotas_adopcion WHERE ubicacion LIKE '${answers[0]}'`,
+   pool.query(`SELECT * FROM mascotas_adopcion WHERE ubicacion LIKE '$${answers[0]}'$`,
      (error, rows, fields) => {
        console.log(rows);
             if (error) {
