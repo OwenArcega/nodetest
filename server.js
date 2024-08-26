@@ -453,17 +453,7 @@ app.post("/mascotaIdeal", (req, res) => {
               // let response = await result.response;
               // let text = response.text();
 
-              let prompt = `Dadas las siguientes mascotas en formato JSON: ${mascotas}, 
-genera un nuevo objeto JSON donde cada mascota tenga las siguientes propiedades adicionales:
-* **tiempoEjercicioDiario:** Número de horas de ejercicio recomendado.
-* **nivelEnergia:** Valor numérico del 1 al 5, siendo 5 el más energético.
-* **tamano:** Pequeño, mediano o grande.
-* **personalidad:** Descripción breve de su personalidad (e.g., juguetón, independiente).
-* **produceAlergias:** Verdadero o falso.
-* **familiasAdecuadas:** Lista de tipos de familia (e.g., con niños, sin niños, con otras mascotas).
-
-Asegúrate de que las propiedades adicionales se asignen de acuerdo a la raza de cada mascota. Usa únicamente las mascotas: ${mascotas}, no crees
-nuevas mascotas, únicamente las que te proporciono`;
+              let prompt = `Que contiene este json?: ${mascotas}`;
               let result = await model.generateContent(prompt);
               let response = await result.response;
               let text = response.text();
