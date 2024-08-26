@@ -429,38 +429,33 @@ app.post('/login', (req, res) => {
 
 app.post("/mascotaIdeal", (req, res) => {
   const { answers } = req.body;
-  console.log(answers);
-  console.log(answers[0])
-   pool.query(`SELECT * FROM mascotas_adopcion WHERE ubicacion LIKE '%${answers[0]}%'`,
+  const estado = answers.pop();
+  const preferencias = answers;
+   pool.query(`SELECT * FROM mascotas_adopcion WHERE ubicacion LIKE '%${estado}%'`,
      (error, rows, fields) => {
-       console.log(rows);
-       console.log(error)
             if (error) {
                 res.json({
                     status: "error",
                     error: error
                 })
             } else {
-                res.json({
-                  status: "ok",
-                  body: rows
-                })
+              let mascotas = rows;
+              process.env.API_KEY = "AIzaSyABQaARp_m_mF3UA3EOQXqKYCBZG1dkFGc";
+              const { GoogleGenerativeAI } = require("@google/generative-ai");
+              const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+              const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+            
+            async function run() {
+              const prompt = `De acuerdo a las siguientes mascotas: ${mascotas} encuentra a la ideal para el usuario con las siguientes preferencias: ${preferencias}, regresame la mascota ideal únicamente en json.`;
+            
+              const result = await model.generateContent(prompt);
+              const response = await result.response;
+              const text = response.text();
+              console.log(text);
+            }
             }
         })
 
-  process.env.API_KEY = "AIzaSyABQaARp_m_mF3UA3EOQXqKYCBZG1dkFGc";
-  const { GoogleGenerativeAI } = require("@google/generative-ai");
-  const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-async function run() {
-  const prompt = "De acuerdo a las siguientes mascotas: ${mascotas} encuentra a la ideal para el usuario con las siguientes preferencias: ${resultados}, regresame la mascota ideal únicamente en json.";
-
-  const result = await model.generateContent(prompt);
-  const response = await result.response;
-  const text = response.text();
-  console.log(text);
-}
 
 run();
 })
