@@ -452,7 +452,7 @@ app.post("/mascotaIdeal", (req, res) => {
               // let response = await result.response;
               // let text = response.text();
 
-              let prompt = `De acuerdo a las siguientes mascotas: ${mascotas}, agrega las siguientes caracteristicas a cada mascota según su raza en formato json.`;
+              let prompt = `De acuerdo a las siguientes mascotas: ${mascotas}, agrega las siguientes caracteristicas a cada mascota según su raza en formato json: tiempo de ejercicio diario, nivel de energía, tamaño, personalidad, si produce alergias y con que tipo de familias vive.`;
               let result = await model.generateContent(prompt);
               let response = await result.response;
               let text = response.text();
