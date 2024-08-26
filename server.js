@@ -431,7 +431,7 @@ app.post("/mascotaIdeal", (req, res) => {
   const { answers } = req.body;
   console.log(answers);
   console.log(answers[0])
-   pool.query(`SELECT * FROM mascotas_adopcion WHERE ubicacion LIKE '$${answers[0]}$'`,
+   pool.query(`SELECT * FROM mascotas_adopcion WHERE ubicacion LIKE '%${answers[0]}%'`,
      (error, rows, fields) => {
        console.log(rows);
        console.log(error)
