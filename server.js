@@ -455,7 +455,7 @@ app.post("/obtenerInfo", (req, res) => {
     ],
   };
 
-  generativeAI
+  model
     .generateContent(requestBody)
     .then((response) => {
       let result = response.candidates[0].content.parts[0].text;
