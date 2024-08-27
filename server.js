@@ -432,35 +432,42 @@ app.post('/login', (req, res) => {
         })
 })
 
-app.post("/mascotaIdeal", async (req, res) => {
+app.post("/mascotaIdeal", (req, res) => {
   const { answers } = req.body;
   const estado = answers.shift();
   const preferencias = answers;
 
-  try {
-    const [rows] = await pool.query(
-      `SELECT * FROM mascotas_adopcion WHERE ubicacion LIKE ?`,
-      [`%${estado}%`]
-    );
+  // Realizar la consulta a la base de datos
+  pool.query(
+    `SELECT * FROM mascotas_adopcion WHERE ubicacion LIKE ?`,
+    [`%${estado}%`],
+    (error, rows) => {
+      if (error) {
+        return res.json({
+          status: "error",
+          error: error.message,
+        });
+      }
 
-    if (rows.length === 0) {
-      return res.json({
-        status: "error",
-        message: "No se encontraron mascotas en la ubicación especificada.",
+      if (rows.length === 0) {
+        return res.json({
+          status: "error",
+          message: "No se encontraron mascotas en la ubicación especificada.",
+        });
+      }
+
+      // Mapear las mascotas
+      let mascotas = rows.map((mascota) => {
+        return {
+          nombre: mascota.nombre,
+          raza: mascota.raza,
+        };
       });
-    }
 
-    let mascotas = rows.map((mascota) => {
-      return {
-        nombre: mascota.nombre,
-        raza: mascota.raza,
-      };
-    });
-
-    // Generar el prompt para el modelo
-    const prompt = `Dadas las siguientes mascotas en formato JSON: ${JSON.stringify(
-      mascotas
-    )}, 
+      // Generar el prompt para el modelo
+      const prompt = `Dadas las siguientes mascotas en formato JSON: ${JSON.stringify(
+        mascotas
+      )}, 
 genera un nuevo objeto JSON donde cada mascota tenga las siguientes propiedades adicionales:
 * **tiempoEjercicioDiario:** Número de horas de ejercicio recomendado.
 * **nivelEnergia:** Valor numérico del 1 al 5, siendo 5 el más energético.
@@ -470,26 +477,29 @@ genera un nuevo objeto JSON donde cada mascota tenga las siguientes propiedades 
 * **familiasAdecuadas:** Lista de tipos de familia (e.g., con niños, sin niños, con otras mascotas).
 
 Asegúrate de que las propiedades adicionales se asignen de acuerdo a la raza de cada mascota. Usa únicamente las mascotas: ${JSON.stringify(
-      mascotas
-    )}, no crees nuevas mascotas, únicamente las que te proporciono.`;
+        mascotas
+      )}, no crees nuevas mascotas, únicamente las que te proporciono.`;
 
-    let result = await model.generateContent(prompt);
-    let response = await result.response;
-    let text = response.text();
+      // Llamar al modelo para generar contenido
+      model
+        .generateContent(prompt)
+        .then((result) => {
+          const response = result.response;
+          const text = response.text();
 
-    // Aquí podrías procesar el texto para encontrar la mascota ideal según las preferencias
-    // Ejemplo: analizar el JSON devuelto y compararlo con las preferencias del usuario
-
-    res.json({
-      status: "success",
-      data: text, // O el objeto procesado que contenga la mascota ideal
-    });
-  } catch (error) {
-    res.json({
-      status: "error",
-      error: error.message,
-    });
-  }
+          res.json({
+            status: "success",
+            data: text, // O el objeto procesado que contenga la mascota ideal
+          });
+        })
+        .catch((err) => {
+          res.json({
+            status: "error",
+            error: err.message,
+          });
+        });
+    }
+  );
 });
 
 app.listen(port, () => {
