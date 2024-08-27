@@ -512,7 +512,7 @@ Asegúrate de que las propiedades adicionales se asignen de acuerdo a la raza de
           )} y las siguientes preferencias del usuario: ${JSON.stringify(
             preferencias
           )}, 
-selecciona la mascota ideal y devuelve un objeto JSON con la mascota seleccionada.`;
+selecciona la mascota ideal y devuelve solo el objeto JSON con la mascota seleccionada.`;
 
           // Llamar al modelo para encontrar la mascota ideal
           model
@@ -521,15 +521,14 @@ selecciona la mascota ideal y devuelve un objeto JSON con la mascota seleccionad
               const responseIdeal = resultIdeal.response;
               const textIdeal = responseIdeal.text();
 
-              // Limpiar la respuesta para asegurarse de que sea JSON válido
+              // Extraer solo el objeto JSON de la respuesta
+              const jsonStartIndex = textIdeal.indexOf("{");
+              const jsonEndIndex = textIdeal.lastIndexOf("}") + 1;
+              const jsonString = textIdeal.slice(jsonStartIndex, jsonEndIndex);
+
               let mascotaIdeal;
               try {
-                // Limpiar la respuesta de caracteres no deseados
-                const cleanedTextIdeal = textIdeal
-                  .replace(/```json/g, "")
-                  .replace(/```/g, "")
-                  .trim();
-                mascotaIdeal = JSON.parse(cleanedTextIdeal);
+                mascotaIdeal = JSON.parse(jsonString);
               } catch (parseError) {
                 return res.json({
                   status: "error",
