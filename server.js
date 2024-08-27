@@ -446,7 +446,7 @@ app.post("/obtenerInfo", (req, res) => {
           },
           {
             inlineData: {
-              mimeType: "image/jpeg",
+              mimeType: "image/*",
               data: imagen, // La imagen debe estar en formato base64
             },
           },
