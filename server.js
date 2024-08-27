@@ -492,7 +492,12 @@ Asegúrate de que las propiedades adicionales se asignen de acuerdo a la raza de
           // Limpiar la respuesta para asegurarse de que sea JSON válido
           let mascotasConCaracteristicas;
           try {
-            mascotasConCaracteristicas = JSON.parse(text);
+            // Limpiar la respuesta de caracteres no deseados
+            const cleanedText = text
+              .replace(/```json/g, "")
+              .replace(/```/g, "")
+              .trim();
+            mascotasConCaracteristicas = JSON.parse(cleanedText);
           } catch (parseError) {
             return res.json({
               status: "error",
@@ -518,9 +523,13 @@ selecciona la mascota ideal y devuelve un objeto JSON con la mascota seleccionad
 
               // Limpiar la respuesta para asegurarse de que sea JSON válido
               let mascotaIdeal;
-              console.log(textIdeal);
               try {
-                mascotaIdeal = JSON.parse(textIdeal);
+                // Limpiar la respuesta de caracteres no deseados
+                const cleanedTextIdeal = textIdeal
+                  .replace(/```json/g, "")
+                  .replace(/```/g, "")
+                  .trim();
+                mascotaIdeal = JSON.parse(cleanedTextIdeal);
               } catch (parseError) {
                 return res.json({
                   status: "error",
