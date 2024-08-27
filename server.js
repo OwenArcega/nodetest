@@ -489,15 +489,14 @@ Asegúrate de que las propiedades adicionales se asignen de acuerdo a la raza de
           const response = result.response;
           const text = response.text();
 
-          // Limpiar la respuesta para asegurarse de que sea JSON válido
+          // Extraer solo el objeto JSON de la respuesta
+          const jsonStartIndex = text.indexOf("{");
+          const jsonEndIndex = text.lastIndexOf("}") + 1;
+          const jsonString = text.slice(jsonStartIndex, jsonEndIndex);
+
           let mascotasConCaracteristicas;
           try {
-            // Limpiar la respuesta de caracteres no deseados
-            const cleanedText = text
-              .replace(/```json/g, "")
-              .replace(/```/g, "")
-              .trim();
-            mascotasConCaracteristicas = JSON.parse(cleanedText);
+            mascotasConCaracteristicas = JSON.parse(jsonString);
           } catch (parseError) {
             return res.json({
               status: "error",
@@ -515,43 +514,36 @@ Asegúrate de que las propiedades adicionales se asignen de acuerdo a la raza de
 selecciona la mascota ideal y devuelve solo el objeto JSON con la mascota seleccionada.`;
 
           // Llamar al modelo para encontrar la mascota ideal
-          model
-            .generateContent(promptMascotaIdeal)
-            .then((resultIdeal) => {
-              const responseIdeal = resultIdeal.response;
-              const textIdeal = responseIdeal.text();
+          return model.generateContent(promptMascotaIdeal);
+        })
+        .then((resultIdeal) => {
+          const responseIdeal = resultIdeal.response;
+          const textIdeal = responseIdeal.text();
 
-              // Extraer solo el objeto JSON de la respuesta
-              const jsonStartIndex = textIdeal.indexOf("{");
-              const jsonEndIndex = textIdeal.lastIndexOf("}") + 1;
-              const jsonString = textIdeal.slice(jsonStartIndex, jsonEndIndex);
+          // Extraer solo el objeto JSON de la respuesta
+          const jsonStartIndex = textIdeal.indexOf("{");
+          const jsonEndIndex = textIdeal.lastIndexOf("}") + 1;
+          const jsonString = textIdeal.slice(jsonStartIndex, jsonEndIndex);
 
-              let mascotaIdeal;
-              try {
-                mascotaIdeal = JSON.parse(jsonString);
-              } catch (parseError) {
-                return res.json({
-                  status: "error",
-                  error:
-                    "La respuesta del modelo para la mascota ideal no es un JSON válido.",
-                  details: parseError.message,
-                });
-              }
-
-              res.json({
-                status: "success",
-                data: {
-                  mascotas: mascotasConCaracteristicas,
-                  mascotaIdeal: mascotaIdeal, // La mascota ideal seleccionada
-                },
-              });
-            })
-            .catch((err) => {
-              res.json({
-                status: "error",
-                error: err.message,
-              });
+          let mascotaIdeal;
+          try {
+            mascotaIdeal = JSON.parse(jsonString);
+          } catch (parseError) {
+            return res.json({
+              status: "error",
+              error:
+                "La respuesta del modelo para la mascota ideal no es un JSON válido.",
+              details: parseError.message,
             });
+          }
+
+          res.json({
+            status: "success",
+            data: {
+              mascotas: mascotasConCaracteristicas,
+              mascotaIdeal: mascotaIdeal, // La mascota ideal seleccionada
+            },
+          });
         })
         .catch((err) => {
           res.json({
