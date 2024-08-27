@@ -459,8 +459,10 @@ app.post("/mascotaIdeal", (req, res) => {
       // Mapear las mascotas
       let mascotas = rows.map((mascota) => {
         return {
+          id: mascota.id,
           nombre: mascota.nombre,
           raza: mascota.raza,
+          // Aquí se agregarían las propiedades adicionales generadas por el modelo
         };
       });
 
@@ -487,10 +489,38 @@ Asegúrate de que las propiedades adicionales se asignen de acuerdo a la raza de
           const response = result.response;
           const text = response.text();
 
-          res.json({
-            status: "success",
-            data: text, // O el objeto procesado que contenga la mascota ideal
-          });
+          // Parsear el texto de respuesta a un objeto JSON
+          const mascotasConCaracteristicas = JSON.parse(text);
+
+          // Generar el prompt para encontrar la mascota ideal
+          const promptMascotaIdeal = `Dadas las siguientes mascotas con sus características: ${JSON.stringify(
+            mascotasConCaracteristicas
+          )} y las siguientes preferencias del usuario: ${JSON.stringify(
+            preferencias
+          )}, 
+selecciona la mascota ideal y devuelve un objeto JSON con la mascota seleccionada.`;
+
+          // Llamar al modelo para encontrar la mascota ideal
+          model
+            .generateContent(promptMascotaIdeal)
+            .then((resultIdeal) => {
+              const responseIdeal = resultIdeal.response;
+              const mascotaIdeal = JSON.parse(responseIdeal.text());
+
+              res.json({
+                status: "success",
+                data: {
+                  mascotas: mascotasConCaracteristicas,
+                  mascotaIdeal: mascotaIdeal, // La mascota ideal seleccionada
+                },
+              });
+            })
+            .catch((err) => {
+              res.json({
+                status: "error",
+                error: err.message,
+              });
+            });
         })
         .catch((err) => {
           res.json({
