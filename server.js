@@ -432,6 +432,56 @@ app.post('/login', (req, res) => {
         })
 })
 
+app.post("/obtenerInfo", (req, res) => {
+  const { image } = req.body; // Se espera que la imagen se envíe en el cuerpo de la solicitud
+
+  const requestBody = {
+    contents: [
+      {
+        parts: [
+          {
+            text: "dame los siguientes datos si los encuentras en el póster: nombre, especie, raza, color, edad, sexo, localización o dirección en donde se perdió, nombre del contacto del dueño, teléfono y correo electrónico; si puedes obtener la información con solo ver la imagen de la mascota regresa lo que encuentres. Ten en cuenta los sinonimos de estas. Si no encuentras todos los datos, pásame los que encuentres. Dame la respuesta en JSON con los siguientes campos: nombre, especie, raza, color, edad, sexo, localización, nombre_del_contacto_del_dueño, teléfono y correo_electrónico.",
+          },
+          {
+            inlineData: {
+              mimeType: "image/jpeg",
+              data: image, // La imagen debe estar en formato base64
+            },
+          },
+        ],
+      },
+    ],
+  };
+
+  generativeAI
+    .generateContent(requestBody)
+    .then((response) => {
+      let result = response.candidates[0].content.parts[0].text;
+
+      // Limpiar posibles caracteres inesperados
+      result = result.trim();
+      if (result.startsWith("```json")) {
+        result = result
+          .replace(/^```json/, "")
+          .replace(/```$/, "")
+          .trim();
+      }
+
+      let dataObj;
+      try {
+        dataObj = JSON.parse(result);
+        res.json(dataObj); // Responde con los datos identificados
+      } catch (parseError) {
+        console.error("Error parsing JSON:", parseError, result);
+        res.status(500).send("Error parsing the response from AI.");
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      res.status(500).send("Error processing the image.");
+    });
+})
+
 app.post("/mascotaIdeal", (req, res) => {
   const { answers } = req.body;
   const estado = answers.shift();
