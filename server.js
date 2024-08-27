@@ -58,6 +58,7 @@ app.post("/registrarPerdida", (req, res) => {
   fetch("https://api.imgbb.com/1/upload", imageRequestOptions)
     .then((response) => response.json())
     .then((result) => {
+      console.log(result);
       let url = result.data.url;
       pool.query(
         `INSERT INTO mascotas_perdidas(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion, id_usuario)
