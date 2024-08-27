@@ -531,13 +531,21 @@ selecciona la mascota ideal y devuelve solo el objeto JSON con la mascota selecc
           });
         }
 
-        res.json({
-          status: "success",
-          data: {
-            mascotas: mascotasConCaracteristicas,
-            mascotaIdeal: mascotaIdeal, // La mascota ideal seleccionada
-          },
-        });
+        pool.query(`SELECT * FROM mascotas_adopcion WHERE id = ${mascotaIdeal.id}`, (error, rows) => {
+          if (error) { 
+            res.json({
+              status: "error",
+              error: "Error al obtener la mascota ideal.",
+              details: error
+            })
+          } else {
+            res.json({
+              status: "success",
+              data: rows
+            })
+          }
+        })
+
       }).catch((err) => {
         res.json({
           status: "error",
