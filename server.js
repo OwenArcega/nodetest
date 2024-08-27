@@ -435,6 +435,8 @@ app.post('/login', (req, res) => {
 app.post("/obtenerInfo", (req, res) => {
   const { image } = req.body; // Se espera que la imagen se envíe en el cuerpo de la solicitud
 
+  console.log(image);
+
   const requestBody = {
     contents: [
       {
@@ -469,7 +471,7 @@ app.post("/obtenerInfo", (req, res) => {
 
       let dataObj;
       try {
-        dataObj = JSON.parse("[" + result + "]");
+        dataObj = JSON.parse(result);
         res.json(dataObj); // Responde con los datos identificados
       } catch (parseError) {
         console.error("Error parsing JSON:", parseError, result);
