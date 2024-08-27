@@ -444,7 +444,7 @@ app.post("/mascotaIdeal", (req, res) => {
                     error: error
                 })
               } else {
-              let mascotas;
+              let mascotas = rows;
               for (let i = 0; i < mascotas.length; i++){
                 let obj;
                 obj["nombre"] = mascota.nombre;
