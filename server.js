@@ -432,32 +432,27 @@ app.post('/login', (req, res) => {
         })
 })
 
+function fileToGenerativePart(imageData, mimeType) {
+  return {
+    inlineData: {
+      data: imageData,
+      mimeType,
+    },
+  };
+}
+
 app.post("/obtenerInfo", (req, res) => {
   const { imagen } = req.body; // Se espera que la imagen se envíe en el cuerpo de la solicitud
 
-  const requestBody = {
-    contents: [
-      {
-        parts: [
-          {
-            text: "dame los siguientes datos si los encuentras en el póster: nombre, especie, raza, color, edad, sexo, localización o dirección en donde se perdió, nombre del contacto del dueño, teléfono y correo electrónico; si puedes obtener la información con solo ver la imagen de la mascota regresa lo que encuentres correspondiente a color, raza y especie. Ten en cuenta los sinonimos de estas. Si no encuentras todos los datos, pásame los que encuentres. Dame la respuesta en JSON con los siguientes campos: nombre, especie, raza, color, edad, sexo, localización, nombre_del_contacto_del_dueño, teléfono y correo_electrónico.",
-          },
-          {
-            inlineData: {
-              mimeType: "image/*",
-              data: imagen, // La imagen debe estar en formato base64
-            },
-          },
-        ],
-      },
-    ],
-  };
+  let prompt =
+    "dame los siguientes datos si los encuentras en el póster: nombre, especie, raza, color, edad, sexo, localización o dirección en donde se perdió, nombre del contacto del dueño, teléfono y correo electrónico; si puedes obtener la información con solo ver la imagen de la mascota regresa lo que encuentres correspondiente a color, raza y especie. Ten en cuenta los sinonimos de estas. Si no encuentras todos los datos, pásame los que encuentres. Dame la respuesta en JSON con los siguientes campos: nombre, especie, raza, color, edad, sexo, localización, nombre_del_contacto_del_dueño, teléfono y correo_electrónico.";
+
+  const imagePart = fileToGenerativePart(imagen, "image/jpeg");
 
   model
-    .generateContent(requestBody)
+    .generateContent([prompt, imagePart])
     .then((response) => {
-      console.log(response)
-      let result = response.candidates[0].content.parts[0].text;
+      let result = response.response.text();
 
       // Limpiar posibles caracteres inesperados
       result = result.trim();
@@ -481,7 +476,7 @@ app.post("/obtenerInfo", (req, res) => {
       console.error("Error:", error);
       res.status(500).send("Error processing the image.");
     });
-})
+});
 
 app.post("/mascotaIdeal", (req, res) => {
   const { answers } = req.body;
