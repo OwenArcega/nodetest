@@ -9,7 +9,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-const mysql = require("mysql2");
+const mysql = require("mysql2-promise");
 const pool = mysql.createPool({
   connectionLimit: 100,
   host: "mysql-c75ed23-ucol-8f58.k.aivencloud.com",
