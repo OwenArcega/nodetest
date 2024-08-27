@@ -518,6 +518,7 @@ selecciona la mascota ideal y devuelve un objeto JSON con la mascota seleccionad
 
               // Limpiar la respuesta para asegurarse de que sea JSON válido
               let mascotaIdeal;
+              console.log(textIdeal);
               try {
                 mascotaIdeal = JSON.parse(textIdeal);
               } catch (parseError) {
