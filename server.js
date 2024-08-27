@@ -483,74 +483,67 @@ Asegúrate de que las propiedades adicionales se asignen de acuerdo a la raza de
       )}, no crees nuevas mascotas, únicamente las que te proporciono.`;
 
       // Llamar al modelo para generar contenido
-      model
-        .generateContent(prompt)
-        .then((result) => {
-          const response = result.response;
-          const text = response.text();
+      model.generateContent(prompt).then((result) => {
+        const response = result.response;
+        const text = response.text();
 
-          // Extraer solo el objeto JSON de la respuesta
-          const jsonStartIndex = text.indexOf("{");
-          const jsonEndIndex = text.lastIndexOf("}") + 1;
-          const jsonString = text.slice(jsonStartIndex, jsonEndIndex);
+        // Extraer solo el objeto JSON de la respuesta
+        const jsonStartIndex = text.indexOf('{');
+        const jsonEndIndex = text.lastIndexOf('}') + 1;
+        const jsonString = text.slice(jsonStartIndex, jsonEndIndex);
 
-          let mascotasConCaracteristicas;
-          try {
-            mascotasConCaracteristicas = JSON.parse(jsonString);
-          } catch (parseError) {
-            return res.json({
-              status: "error",
-              error: "La respuesta del modelo no es un JSON válido.",
-              details: parseError.message,
-            });
-          }
+        let mascotasConCaracteristicas;
+        try {
+          mascotasConCaracteristicas = JSON.parse(jsonString);
+        } catch (parseError) {
+          return res.json({
+            status: "error",
+            error: "La respuesta del modelo no es un JSON válido.",
+            details: parseError.message,
+          });
+        }
 
-          // Generar el prompt para encontrar la mascota ideal
-          const promptMascotaIdeal = `Dadas las siguientes mascotas con sus características: ${JSON.stringify(
-            mascotasConCaracteristicas
-          )} y las siguientes preferencias del usuario: ${JSON.stringify(
-            preferencias
-          )}, 
+        // Generar el prompt para encontrar la mascota ideal
+        const promptMascotaIdeal = `Dadas las siguientes mascotas con sus características: ${JSON.stringify(
+          mascotasConCaracteristicas
+        )} y las siguientes preferencias del usuario: ${JSON.stringify(preferencias)}, 
 selecciona la mascota ideal y devuelve solo el objeto JSON con la mascota seleccionada.`;
 
-          // Llamar al modelo para encontrar la mascota ideal
-          return model.generateContent(promptMascotaIdeal);
-        })
-        .then((resultIdeal) => {
-          const responseIdeal = resultIdeal.response;
-          const textIdeal = responseIdeal.text();
+        // Llamar al modelo para encontrar la mascota ideal
+        return model.generateContent(promptMascotaIdeal);
+      }).then((resultIdeal) => {
+        const responseIdeal = resultIdeal.response;
+        const textIdeal = responseIdeal.text();
 
-          // Extraer solo el objeto JSON de la respuesta
-          const jsonStartIndex = textIdeal.indexOf("{");
-          const jsonEndIndex = textIdeal.lastIndexOf("}") + 1;
-          const jsonString = textIdeal.slice(jsonStartIndex, jsonEndIndex);
+        // Extraer solo el objeto JSON de la respuesta
+        const jsonStartIndex = textIdeal.indexOf('{');
+        const jsonEndIndex = textIdeal.lastIndexOf('}') + 1;
+        const jsonString = textIdeal.slice(jsonStartIndex, jsonEndIndex);
 
-          let mascotaIdeal;
-          try {
-            mascotaIdeal = JSON.parse(jsonString);
-          } catch (parseError) {
-            return res.json({
-              status: "error",
-              error:
-                "La respuesta del modelo para la mascota ideal no es un JSON válido.",
-              details: parseError.message,
-            });
-          }
-
-          res.json({
-            status: "success",
-            data: {
-              mascotas: mascotasConCaracteristicas,
-              mascotaIdeal: mascotaIdeal, // La mascota ideal seleccionada
-            },
-          });
-        })
-        .catch((err) => {
-          res.json({
+        let mascotaIdeal;
+        try {
+          mascotaIdeal = JSON.parse(jsonString);
+        } catch (parseError) {
+          return res.json({
             status: "error",
-            error: err.message,
+            error: "La respuesta del modelo para la mascota ideal no es un JSON válido.",
+            details: parseError.message,
           });
+        }
+
+        res.json({
+          status: "success",
+          data: {
+            mascotas: mascotasConCaracteristicas,
+            mascotaIdeal: mascotaIdeal, // La mascota ideal seleccionada
+          },
         });
+      }).catch((err) => {
+        res.json({
+          status: "error",
+          error: err.message,
+        });
+      });
     }
   );
 });
