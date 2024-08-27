@@ -4,6 +4,11 @@ const cors = require('cors');
 
 const port = 3000;
 
+process.env.API_KEY = "AIzaSyABQaARp_m_mF3UA3EOQXqKYCBZG1dkFGc";
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
 const mysql = require("mysql2");
 const pool = mysql.createPool({
   connectionLimit: 100,
@@ -438,30 +443,40 @@ app.post("/mascotaIdeal", (req, res) => {
                     status: "error",
                     error: error
                 })
-            } else {
-              
-              let mascotas = rows;
-              process.env.API_KEY = "AIzaSyABQaARp_m_mF3UA3EOQXqKYCBZG1dkFGc";
-              const { GoogleGenerativeAI } = require("@google/generative-ai");
-              const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-              const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-            
-            async function run(mascotas) {
+              } else {
+              let mascotas;
+              for (let i = 0; i < mascotas.length; i++){
+                let obj;
+                obj["nombre"] = mascota.nombre;
+                obj["raza"] = mascota.raza;
+                mascotas[i] = obj;
+              }
+
+            async function run() {
               // let prompt = `De acuerdo a las siguientes mascotas: ${mascotas} encuentra a la ideal para el usuario con las siguientes preferencias únicamente usando las mascotas dadas: ${preferencias}, regresame la mascota ideal en formato json, si no se encuentra una ideal, regresa la más cercana o la única disponible. Usa solamente la información que tengas según cada raza de animal, haz inferencias para encontrar la mascota ideal con la información dada y nada más, creale caractersíticas necesarias para que puedas hacer la evaluación con las mascotas dadas.`;
             
               // let result = await model.generateContent(prompt);
               // let response = await result.response;
               // let text = response.text();
-              console.log(mascotas);
-              console.log(mascotas[0])
-              let prompt = `Que contiene este json?: ${mascotas[0].json()}`;
+
+              let prompt = `Dadas las siguientes mascotas en formato JSON: ${JSON.stringify(mascotas)}, 
+genera un nuevo objeto JSON donde cada mascota tenga las siguientes propiedades adicionales:
+* **tiempoEjercicioDiario:** Número de horas de ejercicio recomendado.
+* **nivelEnergia:** Valor numérico del 1 al 5, siendo 5 el más energético.
+* **tamano:** Pequeño, mediano o grande.
+* **personalidad:** Descripción breve de su personalidad (e.g., juguetón, independiente).
+* **produceAlergias:** Verdadero o falso.
+* **familiasAdecuadas:** Lista de tipos de familia (e.g., con niños, sin niños, con otras mascotas).
+
+Asegúrate de que las propiedades adicionales se asignen de acuerdo a la raza de cada mascota. Usa únicamente las mascotas: ${mascotas}, no crees
+nuevas mascotas, únicamente las que te proporciono`;
               let result = await model.generateContent(prompt);
               let response = await result.response;
               let text = response.text();
 
               console.log(text)
             }
-            run(mascotas);
+            run();
             }
         })
 
