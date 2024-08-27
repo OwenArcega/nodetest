@@ -540,8 +540,7 @@ selecciona la mascota ideal y devuelve solo el objeto JSON con la mascota selecc
             })
           } else {
             res.json({
-              status: "ok",
-              otro: "Si jala",
+              status: "success",
               data: rows
             })
           }
