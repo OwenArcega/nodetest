@@ -435,8 +435,6 @@ app.post('/login', (req, res) => {
 app.post("/obtenerInfo", (req, res) => {
   const { imagen } = req.body; // Se espera que la imagen se envíe en el cuerpo de la solicitud
 
-  console.log(imagen);
-
   const requestBody = {
     contents: [
       {
@@ -458,6 +456,7 @@ app.post("/obtenerInfo", (req, res) => {
   model
     .generateContent(requestBody)
     .then((response) => {
+      console.log(response)
       let result = response.candidates[0].content.parts[0].text;
 
       // Limpiar posibles caracteres inesperados
