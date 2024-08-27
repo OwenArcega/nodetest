@@ -433,9 +433,9 @@ app.post('/login', (req, res) => {
 })
 
 app.post("/obtenerInfo", (req, res) => {
-  const { image } = req.body; // Se espera que la imagen se envíe en el cuerpo de la solicitud
+  const { imagen } = req.body; // Se espera que la imagen se envíe en el cuerpo de la solicitud
 
-  console.log(image);
+  console.log(imagen);
 
   const requestBody = {
     contents: [
@@ -447,7 +447,7 @@ app.post("/obtenerInfo", (req, res) => {
           {
             inlineData: {
               mimeType: "image/jpeg",
-              data: image, // La imagen debe estar en formato base64
+              data: imagen, // La imagen debe estar en formato base64
             },
           },
         ],
