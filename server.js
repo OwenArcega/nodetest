@@ -452,7 +452,7 @@ app.post("/mascotaIdeal", (req, res) => {
       if (rows.length === 0) {
         return res.json({
           status: "error",
-          message: "No se encontraron mascotas en la ubicación especificada.",
+          error: "No se encontraron mascotas en la ubicación especificada.",
         });
       }
 
@@ -494,7 +494,7 @@ Asegúrate de que las propiedades adicionales se asignen de acuerdo a la raza de
 
         let mascotasConCaracteristicas;
         try {
-          mascotasConCaracteristicas = JSON.parse(jsonString);
+          mascotasConCaracteristicas = JSON.parse("[" + jsonString + "]");
         } catch (parseError) {
           return res.json({
             status: "error",
@@ -522,7 +522,7 @@ selecciona la mascota ideal y devuelve solo el objeto JSON con la mascota selecc
 
         let mascotaIdeal;
         try {
-          mascotaIdeal = JSON.parse(jsonString);
+          mascotaIdeal = JSON.parse("[" + jsonString + "]");
         } catch (parseError) {
           return res.json({
             status: "error",
@@ -531,7 +531,7 @@ selecciona la mascota ideal y devuelve solo el objeto JSON con la mascota selecc
           });
         }
 
-        pool.query(`SELECT * FROM mascotas_adopcion WHERE id = ${mascotaIdeal.id}`, (error, rows) => {
+        pool.query(`SELECT * FROM mascotas_adopcion WHERE id = ${mascotaIdeal[0].id}`, (error, rows) => {
           if (error) { 
             res.json({
               status: "error",
