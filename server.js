@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const cors = require('cors');
+const cors = require("cors");
 
 const port = 3000;
 
@@ -19,9 +19,9 @@ const pool = mysql.createPool({
   port: 11456,
 });
 
-app.use(cors({origin:"*"}));
-app.use(express.json({ limit: '100mb' }));
-app.use(express.urlencoded({ limit: '100mb', extended: true }));
+app.use(cors({ origin: "*" }));
+app.use(express.json({ limit: "100mb" }));
+app.use(express.urlencoded({ limit: "100mb", extended: true }));
 
 app.get("/", (req, res) => {
   res.send("Hello world!");
@@ -43,7 +43,7 @@ app.post("/registrarPerdida", (req, res) => {
     correoContacto,
     imagen,
     descripcion,
-    id_usuario
+    id_usuario,
   } = req.body;
 
   const imageFormData = new FormData();
@@ -73,12 +73,13 @@ app.post("/registrarPerdida", (req, res) => {
               status: "ok",
             });
           }
-        });
-      });
+        }
+      );
+    });
 });
 
 app.get("/obtenerPerdidas", (req, res) => {
-    pool.query("SELECT * FROM mascotas_perdidas", (error, rows, fields) => {
+  pool.query("SELECT * FROM mascotas_perdidas", (error, rows, fields) => {
     if (error) {
       res.json({
         status: "error",
@@ -93,23 +94,25 @@ app.get("/obtenerPerdidas", (req, res) => {
   });
 });
 
-app.post('/obtenerMascotaPerdida', (req, res) => {
-    const id = req.body.id;
-
-    pool.query(`SELECT * FROM mascotas_perdidas WHERE id = ${id}`, (error, rows, fields) => {
-        if (error) {
-            res.json({
-                status: "error",
-                error: error
-            })
-        } else {
-            res.json({
-                status: "ok",
-                body: rows
-            })
-        }
-    })
-})
+app.post("/obtenerMascotaPerdida", (req, res) => {
+  const id = req.body.id;
+  pool.query(
+    `SELECT * FROM mascotas_perdidas WHERE id = ${id}`,
+    (error, rows, fields) => {
+      if (error) {
+        res.json({
+          status: "error",
+          error: error,
+        });
+      } else {
+        res.json({
+          status: "ok",
+          body: rows,
+        });
+      }
+    }
+  );
+});
 
 app.post("/obtenerPerdidasUsuario", (req, res) => {
   const id = req.body.id;
@@ -132,60 +135,77 @@ app.post("/obtenerPerdidasUsuario", (req, res) => {
   );
 });
 
-app.delete('/eliminarPerdida', (req, res) => {
-    const id = req.body.id;
-    pool.query(`DELETE FROM mascotas_perdidas WHERE id = ${id}`, (error, rows, fields) => {
-        if (error) {
-            res.json({
-                status: "error",
-                error: error
-            })
-        } else {
-            res.json({
-                status: "ok",
-                body: rows
-            })
-        }
-    })
-})
+app.delete("/eliminarPerdida", (req, res) => {
+  const id = req.body.id;
+  pool.query(
+    `DELETE FROM mascotas_perdidas WHERE id = ${id}`,
+    (error, rows, fields) => {
+      if (error) {
+        res.json({
+          status: "error",
+          error: error,
+        });
+      } else {
+        res.json({
+          status: "ok",
+          body: rows,
+        });
+      }
+    }
+  );
+});
 
-app.patch('/modificarPerdida', (req, res) => {
-    const {
-        id,
-      nombre,
-      especie,
-      raza,
-      color,
-      edad,
-      sexo,
-      ubicacion,
-      nombreContacto,
-      telefonoContacto,
-      correoContacto,
-      imagen,
-      descripcion,
-      id_usuario,
-    } = req.body;
+app.patch("/modificarPerdida", (req, res) => {
+  const {
+    id,
+    nombre,
+    especie,
+    raza,
+    color,
+    edad,
+    sexo,
+    ubicacion,
+    nombreContacto,
+    telefonoContacto,
+    correoContacto,
+    imagen,
+    descripcion,
+    id_usuario,
+  } = req.body;
 
-    pool.query(
+  const imageFormData = new FormData();
+  imageFormData.append("key", "6aafdbc3bdbc74f2192d1d3bb68aeb9f");
+  imageFormData.append("image", imagen);
+
+  const imageRequestOptions = {
+    method: "POST",
+    body: imageFormData,
+  };
+
+  fetch("https://api.imgbb.com/1/upload", imageRequestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      let url = result.data.url;
+      pool.query(
         `UPDATE mascotas_perdidas SET nombre = '${nombre}', especie = '${especie}', 
       raza = '${raza}', color = '${color}', edad = ${edad}, sexo = '${sexo}', ubicacion = '${ubicacion}',
       nombreContacto = '${nombreContacto}', telefonoContacto = '${telefonoContacto}', correoContacto = '${correoContacto}',
-      imagen = '${imagen}', descripcion = '${descripcion}', id_usuario = ${id_usuario} WHERE id = ${id}`,
-      (error, rows, fields) => {
-        if (error) {
-          res.json({
-            status: "error",
-            error: error,
-          });
-        } else {
-          res.json({
-            status: "ok",
-          });
+      imagen = '${url}', descripcion = '${descripcion}', id_usuario = ${id_usuario} WHERE id = ${id}`,
+        (error, rows, fields) => {
+          if (error) {
+            res.json({
+              status: "error",
+              error: error,
+            });
+          } else {
+            res.json({
+              status: "ok",
+            });
+          }
         }
-      }
-    );
-})
+      );
+    });
+});
 
 /////////////////////////////////////////////Mascotas en adopcion//////////////////////////////////////////
 
@@ -203,7 +223,7 @@ app.post("/registrarAdopcion", (req, res) => {
     correoContacto,
     imagen,
     descripcion,
-    id_usuario
+    id_usuario,
   } = req.body;
 
   const imageFormData = new FormData();
@@ -214,7 +234,7 @@ app.post("/registrarAdopcion", (req, res) => {
     method: "POST",
     body: imageFormData,
   };
-  
+
   fetch("https://api.imgbb.com/1/upload", imageRequestOptions)
     .then((response) => response.json())
     .then((result) => {
@@ -238,21 +258,21 @@ app.post("/registrarAdopcion", (req, res) => {
     });
 });
 
-app.get('/obtenerAdopcion', (req, res) => {
-    pool.query("SELECT * FROM mascotas_adopcion", (error, rows, fields) => {
-      if (error) {
-        res.json({
-          status: "error",
-          error: error,
-        });
-      } else {
-        res.json({
-          status: "ok",
-          body: rows,
-        });
-      }
-    });
-})
+app.get("/obtenerAdopcion", (req, res) => {
+  pool.query("SELECT * FROM mascotas_adopcion", (error, rows, fields) => {
+    if (error) {
+      res.json({
+        status: "error",
+        error: error,
+      });
+    } else {
+      res.json({
+        status: "ok",
+        body: rows,
+      });
+    }
+  });
+});
 
 app.post("/obtenerMascotaAdopcion", (req, res) => {
   const id = req.body.id;
@@ -317,8 +337,8 @@ app.delete("/eliminarAdopcion", (req, res) => {
 });
 
 app.patch("/modificarAdopcion", (req, res) => {
-    const {
-      id,
+  const {
+    id,
     nombre,
     especie,
     raza,
@@ -334,20 +354,20 @@ app.patch("/modificarAdopcion", (req, res) => {
     id_usuario,
   } = req.body;
 
-    const imageFormData = new FormData();
-    imageFormData.append("key", "6aafdbc3bdbc74f2192d1d3bb68aeb9f");
-    imageFormData.append("image", imagen);
+  const imageFormData = new FormData();
+  imageFormData.append("key", "6aafdbc3bdbc74f2192d1d3bb68aeb9f");
+  imageFormData.append("image", imagen);
 
-    const imageRequestOptions = {
-      method: "POST",
-      body: imageFormData,
-    };
+  const imageRequestOptions = {
+    method: "POST",
+    body: imageFormData,
+  };
 
   fetch("https://api.imgbb.com/1/upload", imageRequestOptions)
     .then((response) => response.json())
     .then((result) => {
       let url = result.data.url;
-  
+
       pool.query(
         `UPDATE mascotas_adopcion SET nombre = '${nombre}', especie = '${especie}', 
       raza = '${raza}', color = '${color}', edad = ${edad}, sexo = '${sexo}', ubicacion = '${ubicacion}',
@@ -372,11 +392,7 @@ app.patch("/modificarAdopcion", (req, res) => {
 //////////////////////////////////USUARIOS///////////////////////////////////////////////
 
 app.post("/registrarUsuario", (req, res) => {
-  const {
-    usuario,
-    correo,
-    contrasena
-  } = req.body;
+  const { usuario, correo, contrasena } = req.body;
 
   pool.query(
     `INSERT INTO usuarios(usuario,correo,contrasena) 
@@ -396,41 +412,41 @@ app.post("/registrarUsuario", (req, res) => {
   );
 });
 
+app.get("/obtenerUsuarios", (req, res) => {
+  pool.query("SELECT * FROM usuarios", (error, rows, fields) => {
+    if (error) {
+      res.json({
+        status: "error",
+        error: error,
+      });
+    } else {
+      res.json({
+        status: "ok",
+        body: rows,
+      });
+    }
+  });
+});
 
-app.get('/obtenerUsuarios', (req,res) => {
-    pool.query("SELECT * FROM usuarios", (error, rows, fields) => {
-        if (error) {
-            res.json({
-                status: "error",
-                error: error
-            })
-        } else {
-            res.json({
-                status: "ok",
-                body: rows
-            });
-        }
-    });
-})
-
-app.post('/login', (req, res) => {
-
-    const { nombre, contrasena } = req.body;
-    pool.query(`SELECT id FROM usuarios WHERE usuario = '${nombre}' AND contrasena = '${contrasena}'`,
-        (error, rows, fields) => {
-            if (error) {
-                res.json({
-                    status: "error",
-                    error: error
-                })
-            } else {
-                res.json({
-                  status: "ok",
-                  body: rows
-                })
-            }
-        })
-})
+app.post("/login", (req, res) => {
+  const { nombre, contrasena } = req.body;
+  pool.query(
+    `SELECT id FROM usuarios WHERE usuario = '${nombre}' AND contrasena = '${contrasena}'`,
+    (error, rows, fields) => {
+      if (error) {
+        res.json({
+          status: "error",
+          error: error,
+        });
+      } else {
+        res.json({
+          status: "ok",
+          body: rows,
+        });
+      }
+    }
+  );
+});
 
 function fileToGenerativePart(imageData, mimeType) {
   return {
@@ -529,75 +545,84 @@ Asegúrate de que las propiedades adicionales se asignen de acuerdo a la raza de
       )}, no crees nuevas mascotas, únicamente las que te proporciono.`;
 
       // Llamar al modelo para generar contenido
-      model.generateContent(prompt).then((result) => {
-        const response = result.response;
-        const text = response.text();
+      model
+        .generateContent(prompt)
+        .then((result) => {
+          const response = result.response;
+          const text = response.text();
 
-        // Extraer solo el objeto JSON de la respuesta
-        const jsonStartIndex = text.indexOf('{');
-        const jsonEndIndex = text.lastIndexOf('}') + 1;
-        const jsonString = text.slice(jsonStartIndex, jsonEndIndex);
+          // Extraer solo el objeto JSON de la respuesta
+          const jsonStartIndex = text.indexOf("{");
+          const jsonEndIndex = text.lastIndexOf("}") + 1;
+          const jsonString = text.slice(jsonStartIndex, jsonEndIndex);
 
-        let mascotasConCaracteristicas;
-        try {
-          mascotasConCaracteristicas = JSON.parse("[" + jsonString + "]");
-        } catch (parseError) {
-          return res.json({
-            status: "error",
-            error: "La respuesta del modelo no es un JSON válido.",
-            details: parseError.message,
-          });
-        }
+          let mascotasConCaracteristicas;
+          try {
+            mascotasConCaracteristicas = JSON.parse("[" + jsonString + "]");
+          } catch (parseError) {
+            return res.json({
+              status: "error",
+              error: "La respuesta del modelo no es un JSON válido.",
+              details: parseError.message,
+            });
+          }
 
-        // Generar el prompt para encontrar la mascota ideal
-        const promptMascotaIdeal = `Dadas las siguientes mascotas con sus características: ${JSON.stringify(
-          mascotasConCaracteristicas
-        )} y las siguientes preferencias del usuario: ${JSON.stringify(preferencias)}, 
+          // Generar el prompt para encontrar la mascota ideal
+          const promptMascotaIdeal = `Dadas las siguientes mascotas con sus características: ${JSON.stringify(
+            mascotasConCaracteristicas
+          )} y las siguientes preferencias del usuario: ${JSON.stringify(
+            preferencias
+          )}, 
 selecciona la mascota ideal y devuelve solo el objeto JSON con la mascota seleccionada.`;
 
-        // Llamar al modelo para encontrar la mascota ideal
-        return model.generateContent(promptMascotaIdeal);
-      }).then((resultIdeal) => {
-        const responseIdeal = resultIdeal.response;
-        const textIdeal = responseIdeal.text();
-
-        // Extraer solo el objeto JSON de la respuesta
-        const jsonStartIndex = textIdeal.indexOf('{');
-        const jsonEndIndex = textIdeal.lastIndexOf('}') + 1;
-        const jsonString = textIdeal.slice(jsonStartIndex, jsonEndIndex);
-
-        let mascotaIdeal;
-        try {
-          mascotaIdeal = JSON.parse("[" + jsonString + "]");
-        } catch (parseError) {
-          return res.json({
-            status: "error",
-            error: "La respuesta del modelo para la mascota ideal no es un JSON válido.",
-            details: parseError.message,
-          });
-        }
-
-        pool.query(`SELECT * FROM mascotas_adopcion WHERE id = ${mascotaIdeal[0].id}`, (error, rows) => {
-          if (error) { 
-            res.json({
-              status: "error",
-              error: "Error al obtener la mascota ideal.",
-              details: error
-            })
-          } else {
-            res.json({
-              status: "success",
-              data: rows
-            })
-          }
+          // Llamar al modelo para encontrar la mascota ideal
+          return model.generateContent(promptMascotaIdeal);
         })
+        .then((resultIdeal) => {
+          const responseIdeal = resultIdeal.response;
+          const textIdeal = responseIdeal.text();
 
-      }).catch((err) => {
-        res.json({
-          status: "error",
-          error: err.message,
+          // Extraer solo el objeto JSON de la respuesta
+          const jsonStartIndex = textIdeal.indexOf("{");
+          const jsonEndIndex = textIdeal.lastIndexOf("}") + 1;
+          const jsonString = textIdeal.slice(jsonStartIndex, jsonEndIndex);
+
+          let mascotaIdeal;
+          try {
+            mascotaIdeal = JSON.parse("[" + jsonString + "]");
+          } catch (parseError) {
+            return res.json({
+              status: "error",
+              error:
+                "La respuesta del modelo para la mascota ideal no es un JSON válido.",
+              details: parseError.message,
+            });
+          }
+
+          pool.query(
+            `SELECT * FROM mascotas_adopcion WHERE id = ${mascotaIdeal[0].id}`,
+            (error, rows) => {
+              if (error) {
+                res.json({
+                  status: "error",
+                  error: "Error al obtener la mascota ideal.",
+                  details: error,
+                });
+              } else {
+                res.json({
+                  status: "success",
+                  data: rows,
+                });
+              }
+            }
+          );
+        })
+        .catch((err) => {
+          res.json({
+            status: "error",
+            error: err.message,
+          });
         });
-      });
     }
   );
 });
