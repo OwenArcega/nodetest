@@ -439,6 +439,7 @@ app.post("/login", (req, res) => {
           error: error,
         });
       } else {
+        console.log(rows);
         res.json({
           status: "ok",
           body: rows,
