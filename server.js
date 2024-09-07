@@ -116,7 +116,7 @@ app.post("/obtenerMascotaPerdida", (req, res) => {
 
 app.post("/obtenerPerdidasUsuario", (req, res) => {
   const id = req.body.id;
-
+  console.log("hola");
   pool.query(
     `SELECT * FROM mascotas_perdidas WHERE id_usuario = ${id}`,
     (error, rows, fields) => {
