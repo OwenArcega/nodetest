@@ -439,7 +439,12 @@ app.post("/login", (req, res) => {
           error: error,
         });
       } else {
-        console.log(rows);
+        if (rows.length == 0) {
+          res.json({
+            status: "error",
+            error: "No se ha encontrado el usuario",
+          });
+        }
         res.json({
           status: "ok",
           body: rows,
