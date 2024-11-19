@@ -10,6 +10,7 @@ const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 const mysql = require("mysql2");
+const { error } = require("console");
 const pool = mysql.createPool({
   connectionLimit: 100,
   host: "mysql-c75ed23-ucol-8f58.k.aivencloud.com",
@@ -75,6 +76,12 @@ app.post("/registrarPerdida", (req, res) => {
           }
         }
       );
+    })
+    .catch((err) => {
+      res.json({
+        status: "Error",
+        error: err,
+      });
     });
 });
 
@@ -96,63 +103,54 @@ app.get("/obtenerPerdidas", (req, res) => {
 
 app.post("/obtenerMascotaPerdida", (req, res) => {
   const id = req.body.id;
-  pool.query(
-    `SELECT * FROM mascotas_perdidas WHERE id = ${id}`,
-    (error, rows, fields) => {
-      if (error) {
-        res.json({
-          status: "error",
-          error: error,
-        });
-      } else {
-        res.json({
-          status: "ok",
-          body: rows,
-        });
-      }
+  pool.query(`SELECT * FROM mascotas_perdidas WHERE id = ${id}`, (error, rows, fields) => {
+    if (error) {
+      res.json({
+        status: "error",
+        error: error,
+      });
+    } else {
+      res.json({
+        status: "ok",
+        body: rows,
+      });
     }
-  );
+  });
 });
 
 app.post("/obtenerPerdidasUsuario", (req, res) => {
   const id = req.body.id;
   console.log("hola");
-  pool.query(
-    `SELECT * FROM mascotas_perdidas WHERE id_usuario = ${id}`,
-    (error, rows, fields) => {
-      if (error) {
-        res.json({
-          status: "error",
-          error: error,
-        });
-      } else {
-        res.json({
-          status: "ok",
-          body: rows,
-        });
-      }
+  pool.query(`SELECT * FROM mascotas_perdidas WHERE id_usuario = ${id}`, (error, rows, fields) => {
+    if (error) {
+      res.json({
+        status: "error",
+        error: error,
+      });
+    } else {
+      res.json({
+        status: "ok",
+        body: rows,
+      });
     }
-  );
+  });
 });
 
 app.delete("/eliminarPerdida", (req, res) => {
   const id = req.body.id;
-  pool.query(
-    `DELETE FROM mascotas_perdidas WHERE id = ${id}`,
-    (error, rows, fields) => {
-      if (error) {
-        res.json({
-          status: "error",
-          error: error,
-        });
-      } else {
-        res.json({
-          status: "ok",
-          body: rows,
-        });
-      }
+  pool.query(`DELETE FROM mascotas_perdidas WHERE id = ${id}`, (error, rows, fields) => {
+    if (error) {
+      res.json({
+        status: "error",
+        error: error,
+      });
+    } else {
+      res.json({
+        status: "ok",
+        body: rows,
+      });
     }
-  );
+  });
 });
 
 app.patch("/modificarPerdida", (req, res) => {
@@ -277,63 +275,54 @@ app.get("/obtenerAdopcion", (req, res) => {
 app.post("/obtenerMascotaAdopcion", (req, res) => {
   const id = req.body.id;
 
-  pool.query(
-    `SELECT * FROM mascotas_adopcion WHERE id = ${id}`,
-    (error, rows, fields) => {
-      if (error) {
-        res.json({
-          status: "error",
-          error: error,
-        });
-      } else {
-        res.json({
-          status: "ok",
-          body: rows,
-        });
-      }
+  pool.query(`SELECT * FROM mascotas_adopcion WHERE id = ${id}`, (error, rows, fields) => {
+    if (error) {
+      res.json({
+        status: "error",
+        error: error,
+      });
+    } else {
+      res.json({
+        status: "ok",
+        body: rows,
+      });
     }
-  );
+  });
 });
 
 app.post("/obtenerAdopcionUsuario", (req, res) => {
   const id = req.body.id;
 
-  pool.query(
-    `SELECT * FROM mascotas_adopcion WHERE id_usuario = ${id}`,
-    (error, rows, fields) => {
-      if (error) {
-        res.json({
-          status: "error",
-          error: error,
-        });
-      } else {
-        res.json({
-          status: "ok",
-          body: rows,
-        });
-      }
+  pool.query(`SELECT * FROM mascotas_adopcion WHERE id_usuario = ${id}`, (error, rows, fields) => {
+    if (error) {
+      res.json({
+        status: "error",
+        error: error,
+      });
+    } else {
+      res.json({
+        status: "ok",
+        body: rows,
+      });
     }
-  );
+  });
 });
 
 app.delete("/eliminarAdopcion", (req, res) => {
   const id = req.body.id;
-  pool.query(
-    `DELETE FROM mascotas_adopcion WHERE id = ${id}`,
-    (error, rows, fields) => {
-      if (error) {
-        res.json({
-          status: "error",
-          error: error,
-        });
-      } else {
-        res.json({
-          status: "ok",
-          body: rows,
-        });
-      }
+  pool.query(`DELETE FROM mascotas_adopcion WHERE id = ${id}`, (error, rows, fields) => {
+    if (error) {
+      res.json({
+        status: "error",
+        error: error,
+      });
+    } else {
+      res.json({
+        status: "ok",
+        body: rows,
+      });
     }
-  );
+  });
 });
 
 app.patch("/modificarAdopcion", (req, res) => {
@@ -535,9 +524,7 @@ app.post("/mascotaIdeal", (req, res) => {
       });
 
       // Generar el prompt para el modelo
-      const prompt = `Dadas las siguientes mascotas en formato JSON: ${JSON.stringify(
-        mascotas
-      )}, 
+      const prompt = `Dadas las siguientes mascotas en formato JSON: ${JSON.stringify(mascotas)}, 
 genera un nuevo objeto JSON donde cada mascota tenga las siguientes propiedades adicionales:
 * **tiempoEjercicioDiario:** Número de horas de ejercicio recomendado.
 * **nivelEnergia:** Valor numérico del 1 al 5, siendo 5 el más energético.
@@ -576,9 +563,7 @@ Asegúrate de que las propiedades adicionales se asignen de acuerdo a la raza de
           // Generar el prompt para encontrar la mascota ideal
           const promptMascotaIdeal = `Dadas las siguientes mascotas con sus características: ${JSON.stringify(
             mascotasConCaracteristicas
-          )} y las siguientes preferencias del usuario: ${JSON.stringify(
-            preferencias
-          )}, 
+          )} y las siguientes preferencias del usuario: ${JSON.stringify(preferencias)}, 
 selecciona la mascota ideal y devuelve solo el objeto JSON con la mascota seleccionada.`;
 
           // Llamar al modelo para encontrar la mascota ideal
@@ -599,8 +584,7 @@ selecciona la mascota ideal y devuelve solo el objeto JSON con la mascota selecc
           } catch (parseError) {
             return res.json({
               status: "error",
-              error:
-                "La respuesta del modelo para la mascota ideal no es un JSON válido.",
+              error: "La respuesta del modelo para la mascota ideal no es un JSON válido.",
               details: parseError.message,
             });
           }
