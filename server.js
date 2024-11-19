@@ -59,23 +59,30 @@ app.post("/registrarPerdida", (req, res) => {
   fetch("https://api.imgbb.com/1/upload", imageRequestOptions)
     .then((response) => response.json())
     .then((result) => {
-      let url = result.data.url;
-      pool.query(
-        `INSERT INTO mascotas_perdidas(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion, id_usuario)
+      if (result.data != "success") {
+        res.json({
+          status: "Error",
+          error: result,
+        });
+      } else {
+        let url = result.data.url;
+        pool.query(
+          `INSERT INTO mascotas_perdidas(nombre,especie,raza,color,edad,sexo,ubicacion,nombreContacto,telefonoContacto,correoContacto,imagen,descripcion, id_usuario)
         VALUES('${nombre}','${especie}','${raza}','${color}',${edad},'${sexo}','${ubicacion}','${nombreContacto}','${telefonoContacto}','${correoContacto}','${url}','${descripcion}', ${id_usuario})`,
-        (error, rows, fields) => {
-          if (error) {
-            res.json({
-              status: "error",
-              error: error,
-            });
-          } else {
-            res.json({
-              status: "ok",
-            });
+          (error, rows, fields) => {
+            if (error) {
+              res.json({
+                status: "error",
+                error: error,
+              });
+            } else {
+              res.json({
+                status: "ok",
+              });
+            }
           }
-        }
-      );
+        );
+      }
     });
 });
 
