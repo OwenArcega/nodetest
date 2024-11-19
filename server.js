@@ -48,7 +48,7 @@ app.post("/registrarPerdida", (req, res) => {
   } = req.body;
 
   const imageFormData = new FormData();
-  imageFormData.append("key", "ee858e80ea061fb934eca33551420ffe");
+  imageFormData.append("key", "6dd3db0cfb2ff944d101f83d3545e850");
   imageFormData.append("image", imagen);
 
   const imageRequestOptions = {
@@ -172,7 +172,7 @@ app.patch("/modificarPerdida", (req, res) => {
   } = req.body;
 
   const imageFormData = new FormData();
-  imageFormData.append("key", "ee858e80ea061fb934eca33551420ffe");
+  imageFormData.append("key", "6dd3db0cfb2ff944d101f83d3545e850");
   imageFormData.append("image", imagen);
 
   const imageRequestOptions = {
@@ -225,7 +225,7 @@ app.post("/registrarAdopcion", (req, res) => {
   } = req.body;
 
   const imageFormData = new FormData();
-  imageFormData.append("key", "ee858e80ea061fb934eca33551420ffe");
+  imageFormData.append("key", "6dd3db0cfb2ff944d101f83d3545e850");
   imageFormData.append("image", imagen);
 
   const imageRequestOptions = {
@@ -344,7 +344,7 @@ app.patch("/modificarAdopcion", (req, res) => {
   } = req.body;
 
   const imageFormData = new FormData();
-  imageFormData.append("key", "ee858e80ea061fb934eca33551420ffe");
+  imageFormData.append("key", "6dd3db0cfb2ff944d101f83d3545e850");
   imageFormData.append("image", imagen);
 
   const imageRequestOptions = {
