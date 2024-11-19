@@ -76,12 +76,6 @@ app.post("/registrarPerdida", (req, res) => {
           }
         }
       );
-    })
-    .catch((err) => {
-      res.json({
-        status: "Error",
-        error: err,
-      });
     });
 });
 
